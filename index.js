@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -37,7 +38,7 @@ const port = process.env.PORT || 3000
 const server = app.listen(port, async () => {
   const host = server.address().address
   const port = server.address().port
-  console.log(`Connext API listening at http://${host}:${port}`)
+  console.log(`Ethcalate Hub listening at http://${host}:${port}`)
   await connectDb()
   await initWeb3()
   const web3 = getWeb3()

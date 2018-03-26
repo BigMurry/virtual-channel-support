@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,12 @@
   "dependencies": {
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
-    "express": "^4.16.3"
+    "dotenv": "^5.0.1",
+    "eslint": "^4.19.1",
+    "express": "^4.16.3",
+    "sequelize": "^4.37.4",
+    "truffle-hdwallet-provider-privkey": "^0.1.0",
+    "web3": "0.20.6"
   },
   "devDependencies": {
     "standard": "^11.0.1"
