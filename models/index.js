@@ -7,6 +7,7 @@ console.log(
 let sequelize
 let User
 let Metrics
+let Transaction
 
 module.exports.connectDb = async () => {
   sequelize = new Sequelize(
@@ -33,6 +34,7 @@ module.exports.connectDb = async () => {
   console.log('Connection has been established successfully.')
   User = sequelize.import('../models/user.model.js')
   Metrics = sequelize.import('../models/metrics.model.js')
+  Transaction = sequelize.import('.../models/transaction.model.js')
 
   if (process.env.INIT_DB) {
     await User.sync()
