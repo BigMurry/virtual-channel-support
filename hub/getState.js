@@ -15,11 +15,6 @@ const handler = async (req, res, next) => {
 
   const { address, channelID } = matchedData(req) 
 
-
-
-  const vault = await Vault.at(vaultAddress)
-  const balance = await vault.getBalance.call(0x0)
-  return res.status(200).json({ balance: balance.toString() })
 }
 
 module.exports.validator = validator
