@@ -23,6 +23,7 @@
     "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "express": "^4.16.3",
+    "express-validator": "^5.0.3",
     "sequelize": "^4.37.4",
     "truffle-hdwallet-provider-privkey": "^0.1.0",
     "web3": "0.20.6"

@@ -16,7 +16,7 @@ const handler = async (req, res, next) => {
   const { channelID } = matchedData(req) 
   
   const { Channel } = getModels()
-  const result = await Channel.find({
+  const result = await Channel.findOne({
   	where: { channelID }
   })
   if (!result) {
