@@ -35,7 +35,7 @@ module.exports.connectDb = async () => {
   console.log('Connection has been established successfully.')
   User = sequelize.import('../models/user.model.js')
   Metrics = sequelize.import('../models/metrics.model.js')
-  Transaction = sequelize.import('.../models/transaction.model.js')
+  Transaction = sequelize.import('../models/transaction.model.js')
   Channel = sequelize.import('../models/channel.model.js')
 
   if (process.env.INIT_DB) {
@@ -62,6 +62,8 @@ module.exports.getDb = () => {
 module.exports.getModels = () => {
   return {
     User,
-    Metrics
+    Metrics,
+    Transaction,
+    Channel
   }
 }

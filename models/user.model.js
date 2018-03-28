@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       channelIDs: {
-        type: DataTypes.Array(DataTypes.STRING),
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true
       },
       phone: {
