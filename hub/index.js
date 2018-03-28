@@ -7,10 +7,10 @@ const getChannelID = require('./getChannelID')
 
 module.exports = app => {
   app.route('/test').get(test.handler)
-  // app
-  //   .route('/latestState')
-  //   // .post('updateState.validator')
-  //   // .post('updateState.handler')
+  app
+    .route('/state')
+    .get(getState.validator)
+    .get(getState.handler)
   // app
   //   .route('/latestState')
   //   .get('getState.validator')
