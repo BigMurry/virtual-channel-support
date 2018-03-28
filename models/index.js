@@ -8,6 +8,7 @@ let sequelize
 let User
 let Metrics
 let Transaction
+let Channel
 
 module.exports.connectDb = async () => {
   sequelize = new Sequelize(
@@ -35,18 +36,17 @@ module.exports.connectDb = async () => {
   User = sequelize.import('../models/user.model.js')
   Metrics = sequelize.import('../models/metrics.model.js')
   Transaction = sequelize.import('.../models/transaction.model.js')
+  Channel = sequelize.import('../models/channel.model.js')
 
   if (process.env.INIT_DB) {
-    await User.sync()
+    await User.sync({force: true})
+    await Transaction.sync({force: true})
+    await Channel.sync({force: true})
     if (process.env.INIT_METRICS) {
       await Metrics.sync()
       await Metrics.build({
         id: 1,
-        apicounter: 0,
-        cardvolume: 0,
-        cardcounter: 0,
-        ethvolume: 0,
-        ethcounter: 0
+        apicounter: 0
       }).save()
     }
   }

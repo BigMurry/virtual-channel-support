@@ -2,23 +2,17 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     'users',
     {
-      id: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
-      },
       address: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      channelID: {
-        type: DataTypes.STRING,
-        allowNull: false
+      channelIDs: {
+        type: DataTypes.Array(DataTypes.STRING),
+        allowNull: true
       },
-      balance: {
-        type: DataTypes.BIGINT
-        allowNull: false
+      phone: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
     },
     {

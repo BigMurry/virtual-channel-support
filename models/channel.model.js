@@ -1,43 +1,39 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
-    'transactions',
+    'channels',
     {
       channelID: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      hash: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      r: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      s: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      balance1: {
+      stake1: {
         type: DataTypes.BIGINT,
         allowNull: false
       },
-      balance2: {
+      stake2: {
         type: DataTypes.BIGINT,
         allowNull: false
       },
-      nonce: {
+      address1: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      address2: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      status: {
+        type: DataTypes.ENUM('open', 'challenge', 'closed'),
+        allowNull: false
+      },
+      latestNonce: {
         type: DataTypes.INTEGER,
-        allowNull: false
-      },
-      currentState: {
-        type: DataTypes.STRING,
         allowNull: false
       }
     },
     {
-      tableName: 'transactions',
-      timestamps: true
+      tableName: 'channels',
+      timestamps: false
     }
   )
 }
