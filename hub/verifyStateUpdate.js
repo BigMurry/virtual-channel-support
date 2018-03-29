@@ -10,7 +10,9 @@ const validator = [
   body('balanceA', 'Please provide balanceA.').exists(),
   body('balanceB', 'Please provide balanceB.').exists(),
   body('sigA', 'Please provide sigA.').exists(),
-  body('sigB', 'Please provide sigB.').exists()
+  body('sigB', 'Please provide sigB.').exists(),
+  body('requireSigA', 'Please provide requireSigA.').exists(),
+  body('requireSigB', 'Please provide requireSigA.').exists()
 ]
 
 const handler = async (req, res, next) => {
@@ -18,7 +20,16 @@ const handler = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { channelId, nonce, balanceA, balanceB, sigA, sigB } = matchedData(req)
+  const {
+    channelId,
+    nonce,
+    balanceA,
+    balanceB,
+    sigA,
+    sigB,
+    requireSigA,
+    requireSigB
+  } = matchedData(req)
 
   const { Channel } = getModels()
 
@@ -33,7 +44,9 @@ const handler = async (req, res, next) => {
     balanceA,
     balanceB,
     sigA,
-    sigB
+    sigB,
+    requireSigA,
+    requireSigB
   }
 
   const verified = verifyStateUpdate(stateObject)

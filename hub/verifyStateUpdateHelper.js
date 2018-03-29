@@ -1,5 +1,4 @@
 const { getChannelManager } = require('../web3')
-const { getModels } = require('../models')
 
 module.exports = async stateUpdateObject => {
   const channelManager = getChannelManager()
@@ -9,7 +8,9 @@ module.exports = async stateUpdateObject => {
     stateUpdateObject.balanceA,
     stateUpdateObject.balanceB,
     stateUpdateObject.sigA,
-    stateUpdateObject.sigB
+    stateUpdateObject.sigB,
+    stateUpdateObject.requireSigA,
+    stateUpdateObject.requireSigB
   )
   console.log('isValid: ', isValid)
   return isValid
