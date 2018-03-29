@@ -1,7 +1,10 @@
 const Web3 = require('web3')
 const WalletProvider = require('truffle-hdwallet-provider-privkey')
+const contract = require('truffle-contract')
+const artifacts = require('../artifacts/ChannelManager.json')
 
 let web3
+let channelManager
 
 module.exports.initWeb3 = () => {
   if (process.env.ETH_LOCAL) {
@@ -36,4 +39,22 @@ module.exports.getAccounts = () => {
       }
     })
   })
+}
+
+module.exports.initChannelManager = async channelManagerAddress => {
+  if (!web3) {
+    throw new Error('Web3 not found')
+  } else {
+    const ChannelManager = contract(artifacts)
+    ChannelManager.setProvider(web3.currentProvider)
+    channelManager = await ChannelManager.at(channelManagerAddress)
+  }
+}
+
+module.exports.getChannelManager = async () => {
+  if (!channelManager) {
+    throw new Error('Problem initializing contract')
+  } else {
+    return channelManager
+  }
 }
