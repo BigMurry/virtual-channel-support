@@ -8,46 +8,48 @@ module.exports = async (contractAddress, abi) => {
   const channelJoin = contract.ChannelJoin()
   const channelChallenge = contract.ChannelChallenge()
   const channelClose = contract.ChannelClose()
-  const { User, Transaction, Channel } = getModels()
+  const { User, Channel } = getModels()
 
   channelOpen.watch(async (error, result) => {
     console.log('channel opened')
     if (!error) {
       let response = result.args
+      console.log('response: ', response)
       // check if channel exists
       let channel = await Channel.findOne({
-        where: { channelID: response.channelID }
+        where: { channelId: response.channelId }
       })
       if (!channel) {
         // check if user exists
-        let user1 = await User.findOne({
-          where: { address: response.address1 }
+        let agentA = await User.findOne({
+          where: { address: response.agentA }
         })
         // if not, add new user
-        if (!user1) {
-          user1 = await User.build({
-            address: response.address1,
-            channelIDs: [response.channelID]
+        if (!agentA) {
+          agentA = await User.build({
+            address: response.agentA,
+            channelIds: [response.channelId]
           }).save()
         }
         // check if user exists
-        let user2 = await User.findOne({
-          where: { address: response.address2 }
+        let agentB = await User.findOne({
+          where: { address: response.agentB }
         })
         // if not, add new user
-        if (!user2) {
-          user2 = await User.build({
-            address: response.address2,
-            channelIDs: [response.channelID]
+        if (!agentB) {
+          agentB = await User.build({
+            address: response.agentB,
+            channelIDs: [response.channelId]
           }).save()
         }
+
         // create new channel DB entry
         channel = await Channel.build({
-          channelID: response.channelID,
-          stake1: response.stake1,
-          stake2: 0,
-          address1: response.address1,
-          address2: response.address2,
+          channelId: response.channelId,
+          depositA: response.depositA.toString(),
+          depositB: 0,
+          agentA: response.agentA,
+          agentB: response.agentB,
           status: 'open',
           latestNonce: 0
         }).save()
@@ -59,12 +61,13 @@ module.exports = async (contractAddress, abi) => {
     console.log('channel joined')
     if (!error) {
       let response = result.args
+      console.log('response: ', response)
       // check if channel exists
       let channel = await Channel.findOne({
-        where: { channelID: response.channelID }
+        where: { channelId: response.channelId }
       })
       if (channel) {
-        channel.stake2 = response.stake2
+        channel.depositB = response.depositB.toString()
         await channel.save()
       }
     }
@@ -74,9 +77,10 @@ module.exports = async (contractAddress, abi) => {
     console.log('channel in challenge period')
     if (!error) {
       let response = result.args
+      console.log('response: ', response)
       // check it channel exists
       let channel = await Channel.findOne({
-        where: { channelID: response.channelID }
+        where: { channelId: response.channelId }
       })
       if (channel) {
         channel.status = 'challenge'
@@ -90,9 +94,10 @@ module.exports = async (contractAddress, abi) => {
     console.log('channel closed')
     if (!error) {
       let response = result.args
+      console.log('response: ', response)
       // check it channel exists
       let channel = await Channel.findOne({
-        where: { channelID: response.channelID }
+        where: { channelId: response.channelId }
       })
       if (channel) {
         channel.status = 'close'

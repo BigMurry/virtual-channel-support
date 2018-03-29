@@ -6,12 +6,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false
       },
-      channelIDs: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+      channelIds: {
+        type: DataTypes.ARRAY(DataTypes.TEXT),
         allowNull: true
       },
       phone: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true
       }
     },

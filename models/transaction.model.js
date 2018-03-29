@@ -2,28 +2,28 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     'transactions',
     {
-      channelID: {
-        type: DataTypes.STRING,
+      channelId: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
       hash: {
         type: DataTypes.STRING,
         allowNull: false
       },
-      r: {
-        type: DataTypes.STRING,
+      sigA: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
-      s: {
-        type: DataTypes.STRING,
+      sigB: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
-      balance1: {
-        type: DataTypes.BIGINT,
+      balanceA: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
-      balance2: {
-        type: DataTypes.BIGINT,
+      balanceB: {
+        type: DataTypes.TEXT,
         allowNull: false
       },
       nonce: {
