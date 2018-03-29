@@ -5,6 +5,7 @@ const cors = require('cors')
 const setupHub = require('./hub')
 const { initWeb3, getWeb3 } = require('./web3')
 const { connectDb } = require('./models')
+const initListener = require('./hub/channelListener')
 
 //express instance
 const app = express()
@@ -42,6 +43,8 @@ const server = app.listen(port, async () => {
   await connectDb()
   await initWeb3()
   const web3 = getWeb3()
+  const contractAddress = process.env.CONTRACT_ADDRESS
+  await initListener(contractAddress, abi)
   web3.eth.getCoinbase((error, coinbase) => {
     web3.eth.getBalance(coinbase, (error, balance) => {
       console.log(`Coinbase balance: ${balance.toNumber()}`)
