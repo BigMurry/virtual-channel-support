@@ -4,6 +4,7 @@ const getState = require('./getState')
 const getChannels = require('./getChannels')
 const getChannelStatus = require('./getChannelStatus')
 const getChannelID = require('./getChannelID')
+const updatePhone = require('./updatePhone')
 
 module.exports = app => {
   app.route('/test').get(test.handler)
@@ -27,4 +28,8 @@ module.exports = app => {
     .route('/getChannelID')
     .get(getChannelID.validator)
     .get(getChannelID.handler)
+  app
+    .route('/updatePhone')
+    .post(updatePhone.validator)
+    .post(updatePhone.handler)
 }

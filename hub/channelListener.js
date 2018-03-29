@@ -15,7 +15,7 @@ module.exports = async (contractAddress, abi) => {
 	    if(!error) {
 	    	let response = result.args
 	    	//check if channel exists
-	    	let channel = await Channel.findOne({
+	    	let channel = Channel.findOne({
 	    		where: {channelID: response.channelID}
 	    	})
 	    	if(!channel) {
