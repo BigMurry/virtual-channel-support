@@ -3,10 +3,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const setupHub = require('./hub')
-const { initWeb3, getWeb3 } = require('./web3')
+const { initWeb3, getWeb3, initChannelManager } = require('./web3')
 const { connectDb } = require('./models')
 const initListener = require('./hub/channelListener')
-const abi = require('./artifacts/channelManager.json')
 
 // express instance
 const app = express()
@@ -45,7 +44,10 @@ const server = app.listen(port, async () => {
   await initWeb3()
   const web3 = getWeb3()
   const contractAddress = process.env.CONTRACT_ADDRESS
-  await initListener(contractAddress, abi)
+  console.log('contractAddress: ', contractAddress)
+  await initListener(contractAddress)
+  await initChannelManager(contractAddress)
+
   web3.eth.getCoinbase((error, coinbase) => {
     if (error) {
       console.log(error)
