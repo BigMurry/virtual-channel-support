@@ -10,7 +10,9 @@ const validator = [
   body('balanceA', 'Please provide balanceA.').exists(),
   body('balanceB', 'Please provide balanceB.').exists(),
   body('sigA', 'Please provide sigA.').exists(),
-  body('sigB', 'Please provide sigB.').exists()
+  body('sigB', 'Please provide sigB.').exists(),
+  body('requireSigA', 'Please provide requireSigA.').exists(),
+  body('requireSigB', 'Please provide requireSigB.').exists()
 ]
 
 const handler = async (req, res, next) => {
@@ -18,13 +20,30 @@ const handler = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { channelId, nonce, balanceA, balanceB, sigA, sigB } = matchedData(req)
+  const {
+    channelId,
+    nonce,
+    balanceA,
+    balanceB,
+    sigA,
+    sigB,
+    requireSigA,
+    requireSigB
+  } = matchedData(req)
 
   const { Transaction, Channel } = getModels()
 
   const channel = Channel.findOne({ where: { channelId } })
   if (!channel) {
-    return res.status(500).json({ error: 'No channel with that id' })
+    return res.status(404).json({ error: 'No channel with that id' })
+  }
+
+  if (!requireSigA && !requireSigB) {
+    return res
+      .status(400)
+      .json({
+        error: 'At least one signature required for a valid state update'
+      })
   }
 
   const stateObject = {
@@ -33,7 +52,9 @@ const handler = async (req, res, next) => {
     balanceA,
     balanceB,
     sigA,
-    sigB
+    sigB,
+    requireSigA,
+    requireSigB
   }
 
   const verified = verifyStateUpdate(stateObject)
