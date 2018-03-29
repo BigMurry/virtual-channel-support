@@ -1,23 +1,144 @@
 [
   {
     "constant": true,
-    "inputs": [],
-    "name": "openedChannel",
+    "inputs": [
+      {
+        "name": "_hashedMsg",
+        "type": "bytes32"
+      },
+      {
+        "name": "_sig",
+        "type": "string"
+      },
+      {
+        "name": "_addr",
+        "type": "address"
+      }
+    ],
+    "name": "isSignedBy",
     "outputs": [
       {
-        "name": "member1",
-        "type": "address"
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_hexstr",
+        "type": "string"
+      }
+    ],
+    "name": "hexstrToBytes",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_str",
+        "type": "string"
       },
       {
-        "name": "member2",
-        "type": "address"
-      },
-      {
-        "name": "startDate",
+        "name": "_startIndex",
         "type": "uint256"
       },
       {
-        "name": "timeout",
+        "name": "_endIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "substring",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_char",
+        "type": "string"
+      }
+    ],
+    "name": "parseInt16Char",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "channels",
+    "outputs": [
+      {
+        "name": "agentA",
+        "type": "address"
+      },
+      {
+        "name": "agentB",
+        "type": "address"
+      },
+      {
+        "name": "depositA",
+        "type": "uint256"
+      },
+      {
+        "name": "depositB",
+        "type": "uint256"
+      },
+      {
+        "name": "status",
+        "type": "uint8"
+      },
+      {
+        "name": "challenge",
+        "type": "uint256"
+      },
+      {
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "name": "closeTime",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceA",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceB",
         "type": "uint256"
       }
     ],
@@ -26,10 +147,205 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_uint",
+        "type": "uint256"
+      }
+    ],
+    "name": "uintToBytes32",
+    "outputs": [
+      {
+        "name": "b",
+        "type": "bytes"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "activeIds",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "toEthereumSignedMessage",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_hashedMsg",
+        "type": "bytes32"
+      },
+      {
+        "name": "_sig",
+        "type": "string"
+      }
+    ],
+    "name": "recoverSigner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_uint",
+        "type": "uint256"
+      }
+    ],
+    "name": "uintToString",
+    "outputs": [
+      {
+        "name": "str",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "name": "agentA",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "agentB",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "depositA",
+        "type": "uint256"
+      }
+    ],
+    "name": "ChannelOpen",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "name": "agentA",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "agentB",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "depositA",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "depositB",
+        "type": "uint256"
+      }
+    ],
+    "name": "ChannelJoin",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "nonce",
+        "type": "uint256"
+      }
+    ],
+    "name": "ChannelChallenge",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "channelId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ChannelClose",
+    "type": "event"
+  },
+  {
     "constant": false,
     "inputs": [
       {
-        "name": "timeout",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "name": "challenge",
         "type": "uint256"
       }
     ],
@@ -41,7 +357,12 @@
   },
   {
     "constant": false,
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
     "name": "joinChannel",
     "outputs": [],
     "payable": true,
@@ -49,37 +370,179 @@
     "type": "function"
   },
   {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceA",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceB",
+        "type": "uint256"
+      },
+      {
+        "name": "sigA",
+        "type": "string"
+      },
+      {
+        "name": "sigB",
+        "type": "string"
+      }
+    ],
+    "name": "isValidStateUpdate",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "constant": false,
     "inputs": [
       {
-        "name": "h",
+        "name": "channelId",
         "type": "bytes32"
       },
       {
-        "name": "v",
-        "type": "uint8"
-      },
-      {
-        "name": "r",
-        "type": "bytes32"
-      },
-      {
-        "name": "s",
-        "type": "bytes32"
-      },
-      {
-        "name": "value1",
+        "name": "nonce",
         "type": "uint256"
       },
       {
-        "name": "value2",
+        "name": "balanceA",
         "type": "uint256"
+      },
+      {
+        "name": "balanceB",
+        "type": "uint256"
+      },
+      {
+        "name": "sigA",
+        "type": "string"
+      },
+      {
+        "name": "sigB",
+        "type": "string"
+      }
+    ],
+    "name": "updateState",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "channelId",
+        "type": "bytes32"
+      },
+      {
+        "name": "nonce",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceA",
+        "type": "uint256"
+      },
+      {
+        "name": "balanceB",
+        "type": "uint256"
+      },
+      {
+        "name": "sigA",
+        "type": "string"
+      },
+      {
+        "name": "sigB",
+        "type": "string"
+      }
+    ],
+    "name": "startChallenge",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "channelId",
+        "type": "bytes32"
       }
     ],
     "name": "closeChannel",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "id",
+        "type": "bytes32"
+      }
+    ],
+    "name": "getChannel",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "address"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
     "type": "function"
   }
 ]
