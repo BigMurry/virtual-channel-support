@@ -2,12 +2,8 @@ const { asyncRequest } = require('../util')
 const { query, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const { Op } = require('sequelize')
 
-const validator = [
-  query('address1', 'Please provide address1.').exists(),
-  query('address2', 'Please provide address2.').exists()
-]
+const validator = [query('address', 'Please provide address.').exists()]
 
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
@@ -15,18 +11,16 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
 
-  const { address1, address2 } = matchedData(req) 
-  
-  const { Channel } = getModels()
-  const result = await Channel.findOne({
-  	where: {
-      [Op.and]: [{address1}, {address2}]
-    }
+  const { address } = matchedData(req)
+
+  const { User } = getModels()
+  const user = await User.find({
+    where: { address }
   })
-  if (!result) {
-  	res.status(500).json({ error: 'Error fetching from db.' })
+  if (!user) {
+    res.status(500).json({ error: 'Error fetching from db.' })
   } else {
-    res.status(200).json({ channelID: result.channelID })
+    res.status(200).json({ user })
   }
 }
 

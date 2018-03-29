@@ -1,12 +1,11 @@
 const { asyncRequest } = require('../util')
-const { query, validationResult } = require('express-validator/check')
+const { query, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const getChannelStatusHelper = require('./getChannelStatusHelper')
 const { Op } = require('sequelize')
 
 const validator = [
-  query('channelID', 'Please provide channelID.').exists(),
+  param('channelId', 'Please provide channelId.').exists(),
   query('nonce', 'Please provide nonce.').exists()
 ]
 
@@ -16,23 +15,18 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
 
-  const { channelID, nonce } = matchedData(req) 
+  const { channelId, nonce } = matchedData(req)
   const { Transaction } = getModels()
-  const result = await Transaction.findAll({
-  	where: {
-      [Op.and]: [
-      	{channelID}, 
-      	{nonce: {[Op.gte]: nonce}}
-      ]
-  	}
+  const updates = await Transaction.findAll({
+    where: {
+      [Op.and]: [{ channelId }, { nonce: { [Op.gte]: nonce } }]
+    }
   })
-  const status = await getChannelStatusHelper(channelID)
-  if(!result || !status) {
-  	res.status(500).json({error: 'Error fetching from db.'})
+  if (!updates) {
+    res.status(500).json({ error: 'Could not find any status updates' })
   } else {
-  	res.status(200).json({result, status})
+    res.status(200).json({ updates })
   }
-
 }
 
 module.exports.validator = validator
