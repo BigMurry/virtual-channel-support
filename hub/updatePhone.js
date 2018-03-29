@@ -14,19 +14,18 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
 
-  const { phone, address } = matchedData(req) 
+  const { phone, address } = matchedData(req)
   const { User } = getModels()
   const result = await User.findOne({
-  	where: { address }
+    where: { address }
   })
-  if(!result || !status) {
-  	res.status(500).json({error: 'Error fetching from db.'})
+  if (!result || !status) {
+    res.status(500).json({ error: 'Error fetching from db.' })
   } else {
     result.phone = phone
     await result.save()
-  	res.status(200).json({success: 'Updated phone number'})
+    res.status(200).json({ success: 'Updated phone number' })
   }
-
 }
 
 module.exports.validator = validator
