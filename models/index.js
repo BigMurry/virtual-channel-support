@@ -6,7 +6,6 @@ console.log(
 
 let sequelize
 let User
-let Metrics
 let Transaction
 let Channel
 
@@ -34,21 +33,13 @@ module.exports.connectDb = async () => {
   await sequelize.authenticate()
   console.log('Connection has been established successfully.')
   User = sequelize.import('../models/user.model.js')
-  Metrics = sequelize.import('../models/metrics.model.js')
   Transaction = sequelize.import('../models/transaction.model.js')
   Channel = sequelize.import('../models/channel.model.js')
 
   if (process.env.INIT_DB) {
-    await User.sync({force: true})
-    await Transaction.sync({force: true})
-    await Channel.sync({force: true})
-    if (process.env.INIT_METRICS) {
-      await Metrics.sync()
-      await Metrics.build({
-        id: 1,
-        apicounter: 0
-      }).save()
-    }
+    await User.sync({ force: true })
+    await Transaction.sync({ force: true })
+    await Channel.sync({ force: true })
   }
 }
 
@@ -62,7 +53,6 @@ module.exports.getDb = () => {
 module.exports.getModels = () => {
   return {
     User,
-    Metrics,
     Transaction,
     Channel
   }

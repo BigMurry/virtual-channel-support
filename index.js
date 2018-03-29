@@ -6,8 +6,9 @@ const setupHub = require('./hub')
 const { initWeb3, getWeb3 } = require('./web3')
 const { connectDb } = require('./models')
 const initListener = require('./hub/channelListener')
+const abi = require('./artifacts/channelManager.json')
 
-//express instance
+// express instance
 const app = express()
 
 // bodyparser middleware
@@ -25,7 +26,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!')
 })
 
-//API routes
+// API routes
 app.get('/hello', function (req, res) {
   res.send('Hello World')
 })
@@ -46,7 +47,15 @@ const server = app.listen(port, async () => {
   const contractAddress = process.env.CONTRACT_ADDRESS
   await initListener(contractAddress, abi)
   web3.eth.getCoinbase((error, coinbase) => {
+    if (error) {
+      console.log(error)
+      process.exit(1)
+    }
     web3.eth.getBalance(coinbase, (error, balance) => {
+      if (error) {
+        console.log(error)
+        process.exit(1)
+      }
       console.log(`Coinbase balance: ${balance.toNumber()}`)
     })
   })
