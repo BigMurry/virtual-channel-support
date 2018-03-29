@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       hash: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       sigA: {
         type: DataTypes.TEXT,
@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       currentState: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       }
     },
     {
