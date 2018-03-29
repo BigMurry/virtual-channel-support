@@ -39,11 +39,9 @@ const handler = async (req, res, next) => {
   }
 
   if (!requireSigA && !requireSigB) {
-    return res
-      .status(400)
-      .json({
-        error: 'At least one signature required for a valid state update'
-      })
+    return res.status(400).json({
+      error: 'At least one signature required for a valid state update'
+    })
   }
 
   const stateObject = {
@@ -57,7 +55,7 @@ const handler = async (req, res, next) => {
     requireSigB
   }
 
-  const verified = verifyStateUpdate(stateObject)
+  const verified = await verifyStateUpdate(stateObject)
   if (verified) {
     res.status(200).json({ message: 'State valid and updated' })
     await Transaction.build(stateObject).save()

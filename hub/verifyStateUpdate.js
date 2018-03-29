@@ -49,7 +49,7 @@ const handler = async (req, res, next) => {
     requireSigB
   }
 
-  const verified = verifyStateUpdate(stateObject)
+  const verified = await verifyStateUpdate(stateObject)
   if (verified) {
     res.status(200).json({ message: 'State valid' })
   } else {
