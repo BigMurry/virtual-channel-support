@@ -23,7 +23,7 @@ const handler = async (req, res, next) => {
     }
   })
   if (!updates) {
-    res.status(500).json({ error: 'Could not find any status updates' })
+    res.status(500).json({ error: 'Could not find any state updates' })
   } else {
     res.status(200).json({ updates })
   }
