@@ -1,0 +1,85 @@
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "openedChannel",
+    "outputs": [
+      {
+        "name": "member1",
+        "type": "address"
+      },
+      {
+        "name": "member2",
+        "type": "address"
+      },
+      {
+        "name": "startDate",
+        "type": "uint256"
+      },
+      {
+        "name": "timeout",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "timeout",
+        "type": "uint256"
+      }
+    ],
+    "name": "openChannel",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "joinChannel",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "h",
+        "type": "bytes32"
+      },
+      {
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "name": "s",
+        "type": "bytes32"
+      },
+      {
+        "name": "value1",
+        "type": "uint256"
+      },
+      {
+        "name": "value2",
+        "type": "uint256"
+      }
+    ],
+    "name": "closeChannel",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
