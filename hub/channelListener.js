@@ -1,7 +1,9 @@
 const { getWeb3 } = require('../web3')
 const { getModels } = require('../models')
+const artifacts = require('../artifacts/ChannelManager.json')
 
-module.exports = async (contractAddress, abi) => {
+module.exports = async contractAddress => {
+  const { abi } = artifacts
   const web3 = getWeb3()
   const contract = web3.eth.contract(abi).at(contractAddress)
   const channelOpen = contract.ChannelOpen()
