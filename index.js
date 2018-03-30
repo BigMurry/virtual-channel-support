@@ -59,6 +59,9 @@ const server = app.listen(port, async () => {
         process.exit(1)
       }
       console.log(`Coinbase balance: ${balance.toNumber()}`)
+      web3.eth.getAccounts((error, result) => { 
+        console.log('Account: ' + result)
+      })
     })
   })
 })
