@@ -51,7 +51,7 @@ module.exports.initChannelManager = async channelManagerAddress => {
   }
 }
 
-module.exports.getChannelManager = async () => {
+module.exports.getChannelManager = () => {
   if (!channelManager) {
     throw new Error('Problem initializing contract')
   } else {
