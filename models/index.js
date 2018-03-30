@@ -32,6 +32,8 @@ module.exports.connectDb = async () => {
   )
   await sequelize.authenticate()
   console.log('Connection has been established successfully.')
+
+  // tables
   User = sequelize.import('../models/user.model.js')
   Transaction = sequelize.import('../models/transaction.model.js')
   Channel = sequelize.import('../models/channel.model.js')
@@ -41,6 +43,10 @@ module.exports.connectDb = async () => {
     await Transaction.sync({ force: true })
     await Channel.sync({ force: true })
   }
+
+  // relations
+  Transaction.belongsTo(Channel)
+  Channel.hasMany(Transaction)
 }
 
 module.exports.getDb = () => {
