@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
 
   const { Channel } = getModels()
 
-  const channel = Channel.findOne({ where: { channelId } })
+  const channel = Channel.findById(channelId)
   if (!channel) {
     return res.status(500).json({ error: 'No channel with that id' })
   }
