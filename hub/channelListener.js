@@ -18,19 +18,14 @@ module.exports = async contractAddress => {
       let response = result.args
       console.log('response: ', response)
       // check if channel exists
-      let channel = await Channel.findOne({
-        where: { channelId: response.channelId }
-      })
+      let channel = await Channel.findById(response.channelId)
       if (!channel) {
         // check if user exists
-        let agentA = await User.findOne({
-          where: { address: response.agentA }
-        })
+        let agentA = await User.findById(response.agentA)
         // if not, add new user
         if (!agentA) {
           agentA = await User.build({
-            address: response.agentA,
-            channelIds: [response.channelId]
+            address: response.agentA
           }).save()
         }
         // check if user exists
@@ -40,14 +35,13 @@ module.exports = async contractAddress => {
         // if not, add new user
         if (!agentB) {
           agentB = await User.build({
-            address: response.agentB,
-            channelIDs: [response.channelId]
+            address: response.agentB
           }).save()
         }
 
         // create new channel DB entry
         channel = await Channel.build({
-          channelId: response.channelId,
+          id: response.channelId,
           depositA: response.depositA.toString(),
           depositB: 0,
           agentA: response.agentA,
@@ -65,9 +59,7 @@ module.exports = async contractAddress => {
       let response = result.args
       console.log('response: ', response)
       // check if channel exists
-      let channel = await Channel.findOne({
-        where: { channelId: response.channelId }
-      })
+      let channel = await Channel.findById(response.channelId)
       if (channel) {
         channel.depositB = response.depositB.toString()
         await channel.save()
@@ -81,9 +73,7 @@ module.exports = async contractAddress => {
       let response = result.args
       console.log('response: ', response)
       // check it channel exists
-      let channel = await Channel.findOne({
-        where: { channelId: response.channelId }
-      })
+      let channel = await Channel.findById(response.channelId)
       if (channel) {
         channel.status = 'challenge'
         await channel.save()
@@ -98,9 +88,7 @@ module.exports = async contractAddress => {
       let response = result.args
       console.log('response: ', response)
       // check it channel exists
-      let channel = await Channel.findOne({
-        where: { channelId: response.channelId }
-      })
+      let channel = await Channel.findById(response.channelId)
       if (channel) {
         channel.status = 'close'
         await channel.save()
