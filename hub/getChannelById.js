@@ -13,9 +13,10 @@ const handler = async (req, res, next) => {
   const { id } = matchedData(req)
 
   const { Channel } = getModels()
-  const channel = Channel.findById(id)
+  const channel = await Channel.findById(id)
+
   if (!channel) {
-    res.status(500).json({ error: 'Error fetching from db.' })
+    res.status(404).json({ error: 'Could not find channel.' })
   } else {
     res.status(200).json({ channel })
   }

@@ -15,6 +15,8 @@ const handler = async (req, res, next) => {
   const { address } = matchedData(req)
 
   const { Channel, Transaction } = getModels()
+
+  // TODO MAKE THIS SCALE
   const channels = await Channel.findAll({
     include: [
       {

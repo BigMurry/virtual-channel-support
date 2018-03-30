@@ -1,17 +1,25 @@
-const { getChannelManager } = require('../web3')
+const { getChannelManager, getWeb3 } = require('../web3')
 
-module.exports = async stateUpdateObject => {
+module.exports = async ({
+  channelId,
+  nonce,
+  balanceA,
+  balanceB,
+  sigA,
+  sigB,
+  requireSigA,
+  requireSigB
+}) => {
   const channelManager = getChannelManager()
   const isValid = await channelManager.isValidStateUpdate.call(
-    stateUpdateObject.channelId,
-    stateUpdateObject.nonce,
-    stateUpdateObject.balanceA,
-    stateUpdateObject.balanceB,
-    stateUpdateObject.sigA,
-    stateUpdateObject.sigB,
-    stateUpdateObject.requireSigA,
-    stateUpdateObject.requireSigB
+    channelId,
+    nonce,
+    balanceA,
+    balanceB,
+    sigA,
+    sigB,
+    requireSigA,
+    requireSigB
   )
-  console.log('isValid: ', isValid)
   return isValid
 }
