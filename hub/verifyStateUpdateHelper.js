@@ -2,7 +2,7 @@ const { getChannelManager } = require('../web3')
 
 module.exports = async stateUpdateObject => {
   const channelManager = getChannelManager()
-  const isValid = await channelManager.isValidStateUpdate(
+  const isValid = await channelManager.isValidStateUpdate.call(
     stateUpdateObject.channelId,
     stateUpdateObject.nonce,
     stateUpdateObject.balanceA,
