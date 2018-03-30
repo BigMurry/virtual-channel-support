@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
 
   const { Transaction, Channel } = getModels()
 
-  const channel = Channel.findById(channelId)
+  const channel = await Channel.findById(channelId)
   if (!channel) {
     return res.status(404).json({ error: 'No channel with that id' })
   }
@@ -62,7 +62,7 @@ const handler = async (req, res, next) => {
     channel.latestNonce = nonce
     await channel.save()
   } else {
-    return res.status(500).json({ error: 'Invalid state update provided' })
+    return res.status(400).json({ error: 'Invalid state update provided' })
   }
 }
 
