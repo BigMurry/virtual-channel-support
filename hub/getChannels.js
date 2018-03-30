@@ -14,8 +14,13 @@ const handler = async (req, res, next) => {
 
   const { address } = matchedData(req)
 
-  const { Channel } = getModels()
+  const { Channel, Transaction } = getModels()
   const channels = await Channel.findAll({
+    include: [
+      {
+        model: Transaction
+      }
+    ],
     where: {
       [Op.or]: [{ agentA: address }, { agentB: address }]
     }
