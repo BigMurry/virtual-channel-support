@@ -3,12 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     'users',
     {
       address: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+        primaryKey: true,
         allowNull: false
-      },
-      channelIds: {
-        type: DataTypes.ARRAY(DataTypes.TEXT),
-        allowNull: true
       },
       phone: {
         type: DataTypes.TEXT,
