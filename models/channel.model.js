@@ -2,9 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
     'channels',
     {
-      channelId: {
+      id: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        primaryKey: true
       },
       depositA: {
         type: DataTypes.TEXT,
