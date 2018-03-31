@@ -28,7 +28,7 @@
     "pg": "^7.4.1",
     "sequelize": "^4.37.4",
     "truffle-contract": "^3.0.4",
-    "truffle-hdwallet-provider-privkey": "^0.1.0",
+    "truffle-hdwallet-provider-privkey": "^0.2.0",
     "web3": "^0.20.6"
   },
   "devDependencies": {

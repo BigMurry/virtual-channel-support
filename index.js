@@ -43,13 +43,6 @@ const server = app.listen(port, async () => {
   await connectDb()
   await initWeb3()
   const web3 = getWeb3()
-  web3.eth.getAccounts((err, res) => {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(res)
-    }
-  })
 
   const contractAddress = process.env.CONTRACT_ADDRESS
   console.log('contractAddress: ', contractAddress)
@@ -57,6 +50,7 @@ const server = app.listen(port, async () => {
   await initListener(contractAddress)
 
   const accounts = await getAccounts()
+  console.log('accounts: ', accounts)
   web3.eth.getBalance(accounts[0], (error, balance) => {
     if (error) {
       console.log(error)
