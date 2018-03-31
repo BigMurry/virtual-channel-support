@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const setupHub = require('./hub')
-const { initWeb3, getWeb3, initChannelManager } = require('./web3')
+const { initWeb3, getWeb3, initChannelManager, getAccounts } = require('./web3')
 const { connectDb } = require('./models')
 const initListener = require('./hub/channelListener')
 
@@ -43,26 +43,26 @@ const server = app.listen(port, async () => {
   await connectDb()
   await initWeb3()
   const web3 = getWeb3()
+  web3.eth.getAccounts((err, res) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(res)
+    }
+  })
+
   const contractAddress = process.env.CONTRACT_ADDRESS
   console.log('contractAddress: ', contractAddress)
-  await initListener(contractAddress)
   await initChannelManager(contractAddress)
+  await initListener(contractAddress)
 
-  web3.eth.getCoinbase((error, coinbase) => {
+  const accounts = await getAccounts()
+  web3.eth.getBalance(accounts[0], (error, balance) => {
     if (error) {
       console.log(error)
       process.exit(1)
     }
-    web3.eth.getBalance(coinbase, (error, balance) => {
-      if (error) {
-        console.log(error)
-        process.exit(1)
-      }
-      console.log(`Coinbase balance: ${balance.toNumber()}`)
-      web3.eth.getAccounts((error, result) => { 
-        console.log('Account: ' + result)
-      })
-    })
+    console.log(`Coinbase balance: ${balance.toNumber()}`)
   })
 })
 if (process.env.ENVIRONMENT === 'DEV') {
