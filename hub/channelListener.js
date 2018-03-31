@@ -1,15 +1,12 @@
-const { getWeb3 } = require('../web3')
+const { getChannelManager } = require('../web3')
 const { getModels } = require('../models')
-const artifacts = require('../artifacts/ChannelManager.json')
 
 module.exports = async contractAddress => {
-  const { abi } = artifacts
-  const web3 = getWeb3()
-  const contract = web3.eth.contract(abi).at(contractAddress)
-  const channelOpen = contract.ChannelOpen()
-  const channelJoin = contract.ChannelJoin()
-  const channelChallenge = contract.ChannelChallenge()
-  const channelClose = contract.ChannelClose()
+  const channelManager = getChannelManager()
+  const channelOpen = channelManager.ChannelOpen()
+  const channelJoin = channelManager.ChannelJoin()
+  const channelChallenge = channelManager.ChannelChallenge()
+  const channelClose = channelManager.ChannelClose()
   const { User, Channel } = getModels()
 
   channelOpen.watch(async (error, result) => {
