@@ -46,8 +46,15 @@ const server = app.listen(port, async () => {
 
   const contractAddress = process.env.CONTRACT_ADDRESS
   console.log('contractAddress: ', contractAddress)
-  await initChannelManager(contractAddress)
-  await initListener(contractAddress)
+
+  try {
+    await initChannelManager(contractAddress)
+    await initListener(contractAddress)
+  } catch (e) {
+    console.log('e: ', e)
+    console.log('Could not initialize channel manager contract, aborting.')
+    process.exit(1)
+  }
 
   const accounts = await getAccounts()
   console.log('accounts: ', accounts)
