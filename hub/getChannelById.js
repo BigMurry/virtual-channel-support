@@ -12,8 +12,13 @@ const handler = async (req, res, next) => {
   }
   const { id } = matchedData(req)
 
-  const { Channel } = getModels()
-  const channel = await Channel.findById(id)
+  const { Channel, Transaction } = getModels()
+  const channel = await Channel.findById(id, {
+    model: Transaction,
+    required: false,
+    limit: 1,
+    order: [['nonce', 'desc']]
+  })
 
   if (!channel) {
     res.status(404).json({ error: 'Could not find channel.' })
