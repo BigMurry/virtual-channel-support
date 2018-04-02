@@ -20,7 +20,10 @@ const handler = async (req, res, next) => {
   const channels = await Channel.findAll({
     include: [
       {
-        model: Transaction
+        model: Transaction,
+        required: false,
+        limit: 1,
+        order: [['nonce', 'desc']]
       }
     ],
     where: {
