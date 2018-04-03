@@ -1,23 +1,37 @@
 const { asyncRequest } = require('../util')
-const { param, validationResult } = require('express-validator/check')
+const { param, query, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
+const { Op } = require('sequelize')
 
-const validator = [param('id', 'Please provide channel ID.').exists()]
+const validator = [
+  param('id', 'Please provide channel ID.').exists(),
+  query('sig', 'Please provide either "sigA" or "sigB".').exists()
+]
 
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { id } = matchedData(req)
+  const { id, sig } = matchedData(req)
+  console.log('sig: ', sig)
 
-  const { Channel, Transaction } = getModels()
+  const { Transaction, Channel } = getModels()
   const channel = await Channel.findById(id, {
-    model: Transaction,
-    required: false,
-    limit: 1,
-    order: [['nonce', 'desc']]
+    include: [
+      {
+        model: Transaction,
+        required: false,
+        limit: 1,
+        order: [['nonce', 'desc']],
+        where: {
+          [sig]: {
+            [Op.ne]: ''
+          }
+        }
+      }
+    ]
   })
 
   if (!channel) {

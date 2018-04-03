@@ -16,7 +16,6 @@ module.exports.initWeb3 = () => {
         'No ETH private key detected, please configure one in the environment settings.'
       )
     }
-    console.log(process.env.ETH_KEY, process.env.ETH_NODE_URL)
     const w = new WalletProvider(process.env.ETH_KEY, process.env.ETH_NODE_URL)
     web3 = new Web3(w.engine)
   }

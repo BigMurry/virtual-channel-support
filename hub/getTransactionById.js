@@ -3,7 +3,7 @@ const { param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
 
-const validator = [param('id', 'Please provide channel ID.').exists()]
+const validator = [param('id', 'Please provide transaction ID.').exists()]
 
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
@@ -12,18 +12,15 @@ const handler = async (req, res, next) => {
   }
   const { id } = matchedData(req)
 
-  const { Channel, Transaction } = getModels()
-  const channel = await Channel.findById(id, {
-    model: Transaction,
-    required: false,
-    limit: 1,
-    order: [['nonce', 'desc']]
+  const { Transaction, Channel } = getModels()
+  const transaction = await Transaction.findById(id, {
+    include: [{ model: Channel }]
   })
 
-  if (!channel) {
+  if (!transaction) {
     res.status(404).json({ error: 'Could not find channel.' })
   } else {
-    res.status(200).json({ channel })
+    res.status(200).json({ transaction })
   }
 }
 

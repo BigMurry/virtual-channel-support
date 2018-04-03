@@ -87,7 +87,7 @@ module.exports = async contractAddress => {
       // check it channel exists
       let channel = await Channel.findById(response.channelId)
       if (channel) {
-        channel.status = 'close'
+        channel.status = 'closed'
         await channel.save()
         // TODO attempt to tell user through phone
       }
