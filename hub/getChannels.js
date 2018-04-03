@@ -24,7 +24,7 @@ const handler = async (req, res, next) => {
       }
     ],
     where: {
-      [Op.or]: [{ agentA: address }, { agentB: address }]
+      [Op.or]: [{ agentA: address.toLowerCase() }, { agentB: address.toLowerCase() }]
     }
   })
   res.status(200).json({ channels })

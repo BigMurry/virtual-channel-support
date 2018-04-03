@@ -9,7 +9,7 @@ let channelManager
 module.exports.initWeb3 = () => {
   if (process.env.ETH_LOCAL) {
     console.log('Connecting to local ETH node')
-    web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545/'))
+    web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545/'))
   } else {
     if (!process.env.ETH_KEY) {
       throw new Error(
