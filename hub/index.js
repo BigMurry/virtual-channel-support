@@ -6,6 +6,7 @@ const getTransactionById = require('./getChannelById')
 const getLatestStateUpdate = require('./getLatestStateUpdate')
 const getChannels = require('./getChannels')
 const getUserByAddress = require('./getUserByAddress')
+const getUserbyName = require('./getUserbyName')
 const updatePhone = require('./updatePhone')
 const updateState = require('./updateState')
 const updateName = require('./updateName')
@@ -28,6 +29,10 @@ module.exports = app => {
     .route('/name')
     .post(updateName.validator)
     .post(updateName.handler)
+    app
+    .route('/user/:name')
+    .get(getUserByName.validator)
+    .post(getUserByName.handler)
 
   // state updates
   app

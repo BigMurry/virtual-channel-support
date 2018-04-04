@@ -16,15 +16,22 @@ const handler = async (req, res, next) => {
 
   const { name, address } = matchedData(req)
   const { User } = getModels()
-  const result = await User.findOne({
-    where: { address }
+  const result1 = await User.findOne({
+    where: { name }
   })
-  if (!result || !status) {
-    res.status(500).json({ error: 'Error fetching from db.' })
+  if (result1.name) {
+    res.status(400).json({ error: 'Nickname already exists'})
   } else {
-    result.name = name
-    await result.save()
-    res.status(200).json({ success: 'Updated name number' })
+    const result2 = await User.findOne({
+      where: { address }
+    })
+    if (!result2 || !status) {
+      res.status(500).json({ error: 'Error fetching from db.' })
+    } else {
+      result2.name = name
+      await result2.save()
+      res.status(200).json({ success: 'Updated name number' })
+    }
   }
 }
 
