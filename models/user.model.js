@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
       phone: {
         type: DataTypes.TEXT,
         allowNull: true
+      },
+      name: {
+        type: DataTypes.TEXT,
+        allowNull: true
       }
     },
     {
