@@ -14,10 +14,14 @@ const handler = async (req, res, next) => {
 
   const { Channel, Transaction } = getModels()
   const channel = await Channel.findById(id, {
-    model: Transaction,
-    required: false,
-    limit: 1,
-    order: [['nonce', 'desc']]
+    include: [
+      {
+        model: Transaction,
+        required: false,
+        limit: 1,
+        order: [['nonce', 'desc']]
+      }
+    ]
   })
 
   if (!channel) {
