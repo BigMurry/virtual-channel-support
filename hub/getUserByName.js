@@ -1,10 +1,10 @@
 const { asyncRequest } = require('../util')
-const { query, validationResult } = require('express-validator/check')
+const { param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
 
 const validator = [
-  query('name', 'Please provide address.').exists()
+  param('name', 'Please provide address.').exists()
 ]
 
 const handler = async (req, res, next) => {

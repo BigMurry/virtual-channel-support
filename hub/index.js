@@ -18,11 +18,11 @@ module.exports = app => {
 
   // user
   app
-    .route('/user/:address')
+    .route('/user/address/:address')
     .get(getUserByAddress.validator)
     .get(getUserByAddress.handler)
   app
-    .route('/user/:name')
+    .route('/user/name/:name')
     .get(getUserByName.validator)
     .get(getUserByName.handler)
   app
