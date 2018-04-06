@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       status: {
-        type: DataTypes.ENUM('open', 'challenge', 'closed'),
+        type: DataTypes.ENUM('open', 'joined', 'challenge', 'closed'),
         allowNull: false
       },
       latestNonce: {
