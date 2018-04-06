@@ -5,7 +5,6 @@ const getChannelById = require('./getChannelById')
 const getTransactionById = require('./getChannelById')
 const getLatestStateUpdate = require('./getLatestStateUpdate')
 const getChannels = require('./getChannels')
-const getUnjoinedChannels = require('./getUnjoinedChannels')
 const getUserByAddress = require('./getUserByAddress')
 const getUserByName = require('./getUserbyName')
 const updatePhone = require('./updatePhone')
@@ -31,7 +30,7 @@ module.exports = app => {
 
   // state updates
   app
-    .route('/stateupdates')
+    .route('/stateupdates/:channelId')
     .get(getStateUpdates.validator)
     .get(getStateUpdates.handler)
   app.route('/state').post(updateState.validator).post(updateState.handler)
@@ -50,10 +49,6 @@ module.exports = app => {
     .get(getChannelById.validator)
     .get(getChannelById.handler)
   app.route('/channel').get(getChannels.validator).get(getChannels.handler)
-  app
-    .route('/channel/unjoined')
-    .get(getUnjoinedChannels.validator)
-    .get(getUnjoinedChannels.handler)
   app
     .route('/channel/id/:id/latest')
     .get(getLatestStateUpdate.validator)
