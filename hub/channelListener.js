@@ -73,6 +73,10 @@ module.exports = async contractAddress => {
       let channel = await Channel.findById(response.channelId)
       if (channel) {
         channel.status = 'challenge'
+        if (response.nonce < channel.nonce) {
+          //Tell user that lower nonce was used to close
+        }
+        channel.nonce = response.nonce
         await channel.save()
         // TODO attempt to tell user through phone
       }

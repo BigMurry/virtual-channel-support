@@ -19,7 +19,8 @@ module.exports = async ({
     sigA,
     sigB,
     requireSigA,
-    requireSigB
+    requireSigB,
+    {gas:1000000}
   )
   return isValid
 }
