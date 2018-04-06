@@ -18,22 +18,29 @@ module.exports = app => {
 
   // user
   app
-    .route('/user/:address')
+    .route('/user/address/:address')
     .get(getUserByAddress.validator)
     .get(getUserByAddress.handler)
   app
-    .route('/user/:name')
+    .route('/user/name/:name')
     .get(getUserByName.validator)
     .get(getUserByName.handler)
-  app.route('/phone').post(updatePhone.validator).post(updatePhone.handler)
-  app.route('/name').post(updateName.validator).post(updateName.handler)
+  app.route('/phone')
+    .post(updatePhone.validator)
+    .post(updatePhone.handler)
+  app
+    .route('/name')
+    .post(updateName.validator)
+    .post(updateName.handler)
 
   // state updates
   app
     .route('/stateupdates/:channelId')
     .get(getStateUpdates.validator)
     .get(getStateUpdates.handler)
-  app.route('/state').post(updateState.validator).post(updateState.handler)
+  app.route('/state')
+    .post(updateState.validator)
+    .post(updateState.handler)
   app
     .route('/verify')
     .post(verifyStateUpdate.validator)
@@ -48,7 +55,10 @@ module.exports = app => {
     .route('/channel/id/:id')
     .get(getChannelById.validator)
     .get(getChannelById.handler)
-  app.route('/channel').get(getChannels.validator).get(getChannels.handler)
+  app
+    .route('/channel')
+    .get(getChannels.validator)
+    .get(getChannels.handler)
   app
     .route('/channel/id/:id/latest')
     .get(getLatestStateUpdate.validator)

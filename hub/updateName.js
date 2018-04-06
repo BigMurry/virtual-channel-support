@@ -19,19 +19,19 @@ const handler = async (req, res, next) => {
   const result1 = await User.findOne({
     where: { name }
   })
-  if (result1.name) {
-    res.status(400).json({ error: 'Nickname already exists'})
-  } else {
+  if (!result1) {
     const result2 = await User.findOne({
       where: { address }
     })
-    if (!result2 || !status) {
+    if (!result2) {
       res.status(500).json({ error: 'Error fetching from db.' })
     } else {
       result2.name = name
       await result2.save()
-      res.status(200).json({ success: 'Updated name number' })
+      res.status(200).json({ success: 'Updated name' })
     }
+  } else {
+    res.status(400).json({ error: 'Nickname already exists'})
   }
 }
 
