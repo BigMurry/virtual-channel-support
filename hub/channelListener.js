@@ -59,6 +59,7 @@ module.exports = async contractAddress => {
       let channel = await Channel.findById(response.channelId)
       if (channel) {
         channel.depositB = response.depositB.toString()
+        channel.status = 'joined'
         await channel.save()
       }
     }
