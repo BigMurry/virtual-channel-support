@@ -17,16 +17,16 @@ const handler = async (req, res, next) => {
 
   const { channelId, nonce } = matchedData(req)
   const { Transaction } = getModels()
-  const updates = await Transaction.findAll({
+  let updates = await Transaction.findAll({
     where: {
       [Op.and]: [{ channelId }, { nonce: { [Op.gte]: nonce } }]
-    }
+    },
+    order: [['nonce', 'desc']]
   })
   if (!updates) {
-    res.status(500).json({ error: 'Could not find any state updates' })
-  } else {
-    res.status(200).json({ updates })
+    updates = []
   }
+  res.status(200).json(updates)
 }
 
 module.exports.validator = validator
