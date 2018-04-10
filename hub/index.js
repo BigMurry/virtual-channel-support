@@ -2,7 +2,7 @@ const test = require('./test')
 const getStateUpdates = require('./getStateUpdates')
 const getChannelByAddresses = require('./getChannelByAddresses')
 const getChannelById = require('./getChannelById')
-const getTransactionById = require('./getChannelById')
+const getTransactionById = require('./getTransactionById')
 const getLatestStateUpdate = require('./getLatestStateUpdate')
 const getChannels = require('./getChannels')
 const getUserByAddress = require('./getUserByAddress')
@@ -25,22 +25,15 @@ module.exports = app => {
     .route('/user/name/:name')
     .get(getUserByName.validator)
     .get(getUserByName.handler)
-  app.route('/phone')
-    .post(updatePhone.validator)
-    .post(updatePhone.handler)
-  app
-    .route('/name')
-    .post(updateName.validator)
-    .post(updateName.handler)
+  app.route('/phone').post(updatePhone.validator).post(updatePhone.handler)
+  app.route('/name').post(updateName.validator).post(updateName.handler)
 
   // state updates
   app
     .route('/stateupdates/:channelId')
     .get(getStateUpdates.validator)
     .get(getStateUpdates.handler)
-  app.route('/state')
-    .post(updateState.validator)
-    .post(updateState.handler)
+  app.route('/state').post(updateState.validator).post(updateState.handler)
   app
     .route('/verify')
     .post(verifyStateUpdate.validator)
@@ -55,10 +48,7 @@ module.exports = app => {
     .route('/channel/id/:id')
     .get(getChannelById.validator)
     .get(getChannelById.handler)
-  app
-    .route('/channel')
-    .get(getChannels.validator)
-    .get(getChannels.handler)
+  app.route('/channel').get(getChannels.validator).get(getChannels.handler)
   app
     .route('/channel/id/:id/latest')
     .get(getLatestStateUpdate.validator)
