@@ -16,8 +16,9 @@ const handler = async (req, res, next) => {
   }
 
   const { channelId, nonce } = matchedData(req)
-  const { Transaction } = getModels()
+  const { Transaction, Channel } = getModels()
   let updates = await Transaction.findAll({
+    include: [{ model: Channel }],
     where: {
       [Op.and]: [{ channelId }, { nonce: { [Op.gte]: nonce } }]
     },
