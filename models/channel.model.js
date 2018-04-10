@@ -30,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
       latestNonce: {
         type: DataTypes.INTEGER,
         allowNull: false
+      },
+      latestOnChainNonce: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
       }
     },
     {

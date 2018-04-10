@@ -7,6 +7,7 @@ module.exports = async contractAddress => {
   const channelJoin = channelManager.ChannelJoin()
   const channelChallenge = channelManager.ChannelChallenge()
   const channelClose = channelManager.ChannelClose()
+  const channelUpdateState = channelManager.ChannelUpdateState()
   const { User, Channel } = getModels()
 
   channelOpen.watch(async (error, result) => {
@@ -73,11 +74,33 @@ module.exports = async contractAddress => {
       // check it channel exists
       let channel = await Channel.findById(response.channelId)
       if (channel) {
+        const nonce = response.nonce.toNumber()
         channel.status = 'challenge'
-        if (response.nonce < channel.nonce) {
-          //Tell user that lower nonce was used to close
+        channel.latestOnChainNonce = nonce
+        if (nonce > channel.nonce) {
+          // this will need to get flagged on the front end
+          channel.latestNonce = nonce
         }
-        channel.nonce = response.nonce
+        await channel.save()
+        // TODO attempt to tell user through phone
+      }
+    }
+  })
+
+  channelUpdateState.watch(async (error, result) => {
+    console.log('channel state updated on-chain')
+    if (!error) {
+      let response = result.args
+      console.log('response: ', response)
+      // check it channel exists
+      let channel = await Channel.findById(response.channelId)
+      if (channel) {
+        const nonce = response.nonce.toNumber()
+        channel.latestOnChainNonce = nonce
+        if (nonce > channel.nonce) {
+          // this will need to get flagged on the front end
+          channel.latestNonce = nonce
+        }
         await channel.save()
         // TODO attempt to tell user through phone
       }
