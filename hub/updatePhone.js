@@ -10,6 +10,7 @@ const validator = [
 
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
+  console.log(errors)
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
@@ -19,7 +20,7 @@ const handler = async (req, res, next) => {
   const result = await User.findOne({
     where: { address }
   })
-  if (!result || !status) {
+  if (!result) {
     res.status(500).json({ error: 'Error fetching from db.' })
   } else {
     result.phone = phone
