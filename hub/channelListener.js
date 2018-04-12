@@ -44,6 +44,7 @@ module.exports = async contractAddress => {
           depositB: 0,
           agentA: response.agentA,
           agentB: response.agentB,
+          challenge: response.challenge.toString(),
           status: 'open',
           latestNonce: 0
         }).save()

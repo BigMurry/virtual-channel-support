@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false
       },
+      challenge: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       status: {
         type: DataTypes.ENUM('open', 'joined', 'challenge', 'closed'),
         allowNull: false
