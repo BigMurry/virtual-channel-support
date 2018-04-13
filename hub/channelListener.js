@@ -78,7 +78,6 @@ module.exports = async contractAddress => {
         const nonce = response.nonce.toNumber()
         channel.status = 'challenge'
         channel.closeTime = response.closeTime.toNumber()
-        console.log('*****CHANNEL.CLOSETIME:', response.closeTime.toNumber())
         channel.latestOnChainNonce = nonce
         if (nonce > channel.nonce) {
           // this will need to get flagged on the front end
