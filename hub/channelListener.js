@@ -75,14 +75,9 @@ module.exports = async contractAddress => {
       // check it channel exists
       let channel = await Channel.findById(response.channelId)
       if (channel) {
-        const nonce = response.nonce.toNumber()
         channel.status = 'challenge'
         channel.closeTime = response.closeTime.toNumber()
-        channel.latestOnChainNonce = nonce
-        if (nonce > channel.nonce) {
-          // this will need to get flagged on the front end
-          channel.latestNonce = nonce
-        }
+        console.log('*****CHANNEL.CLOSETIME:', response.closeTime.toNumber())
         await channel.save() // not updating the closeTime
         // TODO attempt to tell user through phone
       }
