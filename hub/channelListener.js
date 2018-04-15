@@ -49,6 +49,8 @@ module.exports = async contractAddress => {
           latestNonce: 0
         }).save()
       }
+    } else {
+      console.log(error)
     }
   })
 
@@ -64,6 +66,8 @@ module.exports = async contractAddress => {
         channel.status = 'joined'
         await channel.save()
       }
+    } else {
+      console.log(error)
     }
   })
 
@@ -81,6 +85,8 @@ module.exports = async contractAddress => {
         await channel.save() // not updating the closeTime
         // TODO attempt to tell user through phone
       }
+    } else {
+      console.log(error)
     }
   })
 
@@ -101,6 +107,8 @@ module.exports = async contractAddress => {
         await channel.save()
         // TODO attempt to tell user through phone
       }
+    } else {
+      console.log(error)
     }
   })
 
@@ -116,6 +124,8 @@ module.exports = async contractAddress => {
         await channel.save()
         // TODO attempt to tell user through phone
       }
+    } else {
+      console.log(error)
     }
   })
 }
