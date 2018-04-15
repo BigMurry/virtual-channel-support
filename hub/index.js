@@ -3,6 +3,7 @@ const getStateUpdates = require('./getStateUpdates')
 const getChannelByAddresses = require('./getChannelByAddresses')
 const getChannelById = require('./getChannelById')
 const getTransactionById = require('./getTransactionById')
+const getTransactionByChannelNonce = require('./getTransactionByChannelNonce')
 const getLatestStateUpdate = require('./getLatestStateUpdate')
 const getChannels = require('./getChannels')
 const getUserByAddress = require('./getUserByAddress')
@@ -59,4 +60,8 @@ module.exports = app => {
     .route('/transaction/:id')
     .get(getTransactionById.validator)
     .get(getTransactionById.handler)
+  app
+    .route('/transaction')
+    .get(getTransactionByChannelNonce.validator)
+    .get(getTransactionByChannelNonce.handler)
 }
