@@ -23,23 +23,8 @@ const handler = async (req, res, next) => {
     status,
     challenge,
     nonce,
-    closeTime,
-    balanceA,
-    balanceB
+    closeTime
   ] = onChainChannel
-  console.log(
-    'onChainChannel: ',
-    agentA,
-    agentB,
-    depositA,
-    depositB,
-    status,
-    challenge,
-    nonce,
-    closeTime,
-    balanceA,
-    balanceB
-  )
 
   const { Channel } = getModels()
   const channel = await Channel.findById(id)
