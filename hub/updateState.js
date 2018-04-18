@@ -1,11 +1,11 @@
 const { asyncRequest } = require('../util')
-const { body, validationResult } = require('express-validator/check')
+const { param, body, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
 const verifyStateUpdate = require('./verifyStateUpdateHelper')
 
 const validator = [
-  body('channelId', 'Please provide channelId.').exists(),
+  param('id', 'Please provide channelId.').exists(),
   body('nonce', 'Please provide nonce.').exists(),
   body('balanceA', 'Please provide balanceA.').exists(),
   body('balanceB', 'Please provide balanceB.').exists(),
@@ -21,7 +21,7 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
   const {
-    channelId,
+    id,
     nonce,
     balanceA,
     balanceB,
@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
 
   const { Transaction, Channel } = getModels()
 
-  const channel = await Channel.findById(channelId)
+  const channel = await Channel.findById(id)
   if (!channel) {
     return res.status(404).json({ error: 'No channel with that id' })
   }
@@ -45,7 +45,7 @@ const handler = async (req, res, next) => {
   }
 
   const stateObject = {
-    channelId,
+    channelId: id,
     nonce,
     balanceA,
     balanceB,

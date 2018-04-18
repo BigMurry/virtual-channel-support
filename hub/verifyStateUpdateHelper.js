@@ -1,4 +1,4 @@
-const { getChannelManager, getWeb3 } = require('../web3')
+const { getChannelManager } = require('../web3')
 
 module.exports = async ({
   channelId,
@@ -20,7 +20,7 @@ module.exports = async ({
     sigB,
     requireSigA,
     requireSigB,
-    {gas:1000000}
+    { gas: 1000000 }
   )
   return isValid
 }

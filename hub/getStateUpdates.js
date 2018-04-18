@@ -5,7 +5,7 @@ const { getModels } = require('../models')
 const { Op } = require('sequelize')
 
 const validator = [
-  param('channelId', 'Please provide channelId.').exists(),
+  param('id', 'Please provide channelId.').exists(),
   query('nonce', 'Please provide nonce.').exists()
 ]
 
@@ -15,12 +15,12 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
 
-  const { channelId, nonce } = matchedData(req)
+  const { id, nonce } = matchedData(req)
   const { Transaction, Channel } = getModels()
   let updates = await Transaction.findAll({
     include: [{ model: Channel }],
     where: {
-      [Op.and]: [{ channelId }, { nonce: { [Op.gte]: nonce } }]
+      [Op.and]: [{ channelId: id }, { nonce: { [Op.gte]: nonce } }]
     },
     order: [['nonce', 'desc']]
   })

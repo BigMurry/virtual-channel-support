@@ -12,6 +12,7 @@ const updatePhone = require('./updatePhone')
 const updateState = require('./updateState')
 const updateName = require('./updateName')
 const verifyStateUpdate = require('./verifyStateUpdate')
+const updateChannelStatus = require('./updateChannelStatus')
 
 module.exports = app => {
   // testing
@@ -31,12 +32,15 @@ module.exports = app => {
 
   // state updates
   app
-    .route('/stateupdates/:channelId')
+    .route('/channel/id/:id/state')
     .get(getStateUpdates.validator)
     .get(getStateUpdates.handler)
-  app.route('/state').post(updateState.validator).post(updateState.handler)
   app
-    .route('/verify')
+    .route('/channel/id/:id/state')
+    .post(updateState.validator)
+    .post(updateState.handler)
+  app
+    .route('/channel/id/:id/state/verify')
     .post(verifyStateUpdate.validator)
     .post(verifyStateUpdate.handler)
 
@@ -54,6 +58,10 @@ module.exports = app => {
     .route('/channel/id/:id/latest')
     .get(getLatestStateUpdate.validator)
     .get(getLatestStateUpdate.handler)
+  app
+    .route('/channel/id/:id/update')
+    .post(updateChannelStatus.validator)
+    .post(updateChannelStatus.handler)
 
   // transaction
   app
