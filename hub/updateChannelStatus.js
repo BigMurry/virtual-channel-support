@@ -72,7 +72,19 @@ const handler = async (req, res, next) => {
     })
   }
 
-  res.status(200).json({ message: 'Channel updated with onchain state' })
+  res.status(200).json({
+    channel: {
+      agentA,
+      agentB,
+      depositA: depositA.toString(),
+      depositB: depositB.toString(),
+      challenge: challenge.toNumber(),
+      status: statusEnum,
+      latestNonce: nonce.toNumber(),
+      latestOnChainNonce: nonce.toNumber(),
+      closeTime: closeTime.toNumber()
+    }
+  })
 }
 
 module.exports.validator = validator
