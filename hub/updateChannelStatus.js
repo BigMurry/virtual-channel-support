@@ -14,7 +14,8 @@ const handler = async (req, res, next) => {
   const { id } = matchedData(req)
 
   const channelManager = getChannelManager()
-  const onChainChannel = await channelManager.getChannel.call(id)
+  const onChainChannel = await channelManager.methods.getChannel(id).call()
+  console.log('onChainChannel: ', Object.values(onChainChannel))
   const [
     agentA,
     agentB,
@@ -24,12 +25,12 @@ const handler = async (req, res, next) => {
     challenge,
     nonce,
     closeTime
-  ] = onChainChannel
+  ] = Object.values(onChainChannel)
 
   const { Channel } = getModels()
-  const channel = await Channel.findById(id)
+  const channel = await Channel.findById(id.toLowerCase())
   let statusEnum
-  switch (status.toNumber()) {
+  switch (parseInt(status)) {
     case 0:
       statusEnum = 'open'
       break
@@ -47,28 +48,28 @@ const handler = async (req, res, next) => {
     // we dont have the channel in our db, build it
     await channel
       .build({
-        agentA,
-        agentB,
-        depositA: depositA.toString(),
-        depositB: depositB.toString(),
-        challenge: challenge.toNumber(),
+        agentA: agentA.toLowerCase(),
+        agentB: agentB.toLowerCase(),
+        depositA,
+        depositB,
+        challenge,
         status: statusEnum,
-        latestNonce: nonce.toNumber(),
-        latestOnChainNonce: nonce.toNumber(),
-        closeTime: closeTime.toNumber()
+        latestNonce: nonce,
+        latestOnChainNonce: nonce,
+        closeTime: closeTime
       })
       .save()
   } else {
     // update with on chain data
     await channel.update({
-      agentA,
-      agentB,
-      depositA: depositA.toString(),
-      depositB: depositB.toString(),
-      challenge: challenge.toNumber(),
+      agentA: agentA.toLowerCase(),
+      agentB: agentA.toLowerCase(),
+      depositA,
+      depositB,
+      challenge,
       status: statusEnum,
-      latestOnChainNonce: nonce.toNumber(),
-      closeTime: closeTime.toNumber()
+      latestOnChainNonce: nonce,
+      closeTime
     })
   }
 
@@ -76,13 +77,13 @@ const handler = async (req, res, next) => {
     channel: {
       agentA,
       agentB,
-      depositA: depositA.toString(),
-      depositB: depositB.toString(),
-      challenge: challenge.toNumber(),
+      depositA,
+      depositB,
+      challenge,
       status: statusEnum,
-      latestNonce: nonce.toNumber(),
-      latestOnChainNonce: nonce.toNumber(),
-      closeTime: closeTime.toNumber()
+      latestNonce: nonce,
+      latestOnChainNonce: nonce,
+      closeTime
     }
   })
 }

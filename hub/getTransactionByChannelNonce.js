@@ -18,7 +18,7 @@ const handler = async (req, res, next) => {
   const { Transaction } = getModels()
   const transaction = await Transaction.findOne({
     where: {
-      channelId: channel,
+      channelId: channel.toLowerCase(),
       nonce
     }
   })

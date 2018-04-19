@@ -20,7 +20,10 @@ const handler = async (req, res, next) => {
   const { Channel } = getModels()
   const channel = await Channel.findOne({
     where: {
-      [Op.and]: [{ agentA }, { agentB }]
+      [Op.and]: [
+        { agentA: agentA.toLowerCase() },
+        { agentB: agentB.toLowerCase() }
+      ]
     }
   })
   if (!channel) {

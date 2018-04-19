@@ -18,7 +18,7 @@ const handler = async (req, res, next) => {
   console.log('sig: ', sig)
 
   const { Transaction, Channel } = getModels()
-  const channel = await Channel.findById(id, {
+  const channel = await Channel.findById(id.toLowerCase(), {
     include: [
       {
         model: Transaction,

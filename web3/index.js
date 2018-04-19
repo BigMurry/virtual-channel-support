@@ -1,24 +1,32 @@
 const Web3 = require('web3')
-const WalletProvider = require('truffle-hdwallet-provider-privkey')
-const contract = require('truffle-contract')
 const artifacts = require('../artifacts/ChannelManager.json')
 
 let web3
 let channelManager
 
-module.exports.initWeb3 = () => {
+module.exports.initWeb3 = async () => {
+  let accountAddress
   if (process.env.ETH_LOCAL) {
     console.log('Connecting to local ETH node')
-    web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:9545/'))
+
+    web3 = new Web3('ws://localhost:9545')
+    accountAddress = await web3.eth.getAccounts()[0]
+    console.log('accountAddress: ', accountAddress)
   } else {
     if (!process.env.ETH_KEY) {
       throw new Error(
         'No ETH private key detected, please configure one in the environment settings.'
       )
     }
-    const w = new WalletProvider(process.env.ETH_KEY, process.env.ETH_NODE_URL)
-    web3 = new Web3(w.engine)
+    console.log(`Connecting to ETH node at ${process.env.ETH_NODE_URL}`)
+    web3 = new Web3(process.env.ETH_NODE_URL)
+    const account = web3.eth.accounts.privateKeyToAccount(process.env.ETH_KEY)
+    web3.eth.accounts.wallet.add(account)
+    accountAddress = web3.eth.accounts.wallet[0].address
+    console.log('accountAddress: ', accountAddress)
   }
+  const balance = await web3.eth.getBalance(accountAddress)
+  console.log('balance: ', balance)
 }
 
 module.exports.getWeb3 = () => {
@@ -29,25 +37,11 @@ module.exports.getWeb3 = () => {
   }
 }
 
-module.exports.getAccounts = () => {
-  return new Promise((resolve, reject) => {
-    web3.eth.getAccounts((error, result) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(result)
-      }
-    })
-  })
-}
-
 module.exports.initChannelManager = async channelManagerAddress => {
   if (!web3) {
     throw new Error('Web3 not found')
   } else {
-    const ChannelManager = contract(artifacts)
-    ChannelManager.setProvider(web3.currentProvider)
-    channelManager = await ChannelManager.at(channelManagerAddress)
+    channelManager = new web3.eth.Contract(artifacts.abi, channelManagerAddress)
   }
 }
 

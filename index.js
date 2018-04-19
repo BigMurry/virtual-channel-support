@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const setupHub = require('./hub')
-const { initWeb3, getWeb3, initChannelManager, getAccounts } = require('./web3')
+const { initWeb3, initChannelManager } = require('./web3')
 const { connectDb } = require('./models')
 const initListener = require('./hub/channelListener')
 
@@ -42,7 +42,6 @@ const server = app.listen(port, async () => {
   console.log(`Ethcalate Hub listening at http://${host}:${port}`)
   await connectDb()
   await initWeb3()
-  const web3 = getWeb3()
 
   const contractAddress = process.env.CONTRACT_ADDRESS
   console.log('contractAddress: ', contractAddress)
@@ -55,16 +54,6 @@ const server = app.listen(port, async () => {
     console.log('Could not initialize channel manager contract, aborting.')
     process.exit(1)
   }
-
-  const accounts = await getAccounts()
-  console.log('accounts: ', accounts)
-  web3.eth.getBalance(accounts[0], (error, balance) => {
-    if (error) {
-      console.log(error)
-      process.exit(1)
-    }
-    console.log(`Coinbase balance: ${balance.toNumber()}`)
-  })
 })
 if (process.env.ENVIRONMENT === 'DEV') {
   console.log('Running in DEV mode.')

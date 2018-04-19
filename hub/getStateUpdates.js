@@ -20,7 +20,10 @@ const handler = async (req, res, next) => {
   let updates = await Transaction.findAll({
     include: [{ model: Channel }],
     where: {
-      [Op.and]: [{ channelId: id }, { nonce: { [Op.gte]: nonce } }]
+      [Op.and]: [
+        { channelId: id.toLowerCase() },
+        { nonce: { [Op.gte]: nonce } }
+      ]
     },
     order: [['nonce', 'desc']]
   })

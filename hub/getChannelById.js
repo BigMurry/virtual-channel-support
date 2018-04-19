@@ -13,7 +13,7 @@ const handler = async (req, res, next) => {
   const { id } = matchedData(req)
 
   const { Channel, Transaction } = getModels()
-  const channel = await Channel.findById(id, {
+  const channel = await Channel.findById(id.toLowerCase(), {
     include: [
       {
         model: Transaction,

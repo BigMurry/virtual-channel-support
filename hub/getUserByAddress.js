@@ -15,7 +15,7 @@ const handler = async (req, res, next) => {
 
   const { User } = getModels()
   const user = await User.find({
-    where: { address }
+    where: { address: address.toLowerCase() }
   })
   if (!user) {
     res.status(500).json({ error: 'Error fetching from db.' })
