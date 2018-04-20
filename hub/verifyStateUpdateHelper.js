@@ -1,4 +1,4 @@
-const { getChannelManager } = require('../web3')
+const { getChannelManager, getWeb3 } = require('../web3')
 
 module.exports = async ({
   channelId,
@@ -11,17 +11,21 @@ module.exports = async ({
   requireSigB
 }) => {
   const channelManager = getChannelManager()
-  const isValid = await channelManager.methods
-    .isValidStateUpdate(
-      channelId,
-      nonce,
-      balanceA,
-      balanceB,
-      sigA,
-      sigB,
-      requireSigA,
-      requireSigB
-    )
-    .call({ gas: 1000000 })
+  const web3 = getWeb3()
+  const isValid = await web3.eth.call({
+    to: channelManager.address,
+    data: channelManager.methods
+      .isValidStateUpdate(
+        channelId,
+        nonce,
+        balanceA,
+        balanceB,
+        sigA,
+        sigB,
+        requireSigA,
+        requireSigB
+      )
+      .encodeABI()
+  })
   return isValid
 }

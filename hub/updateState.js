@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
 
   const { Transaction, Channel } = getModels()
 
-  const channel = await Channel.findById(id)
+  const channel = await Channel.findById(id.toLowerCase())
   if (!channel) {
     return res.status(404).json({ error: 'No channel with that id' })
   }
