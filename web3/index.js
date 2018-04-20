@@ -10,7 +10,8 @@ module.exports.initWeb3 = async () => {
     console.log('Connecting to local ETH node')
 
     web3 = new Web3('ws://localhost:9545')
-    accountAddress = await web3.eth.getAccounts()[0]
+    const accounts = await web3.eth.getAccounts()
+    accountAddress = accounts[0]
     console.log('accountAddress: ', accountAddress)
   } else {
     if (!process.env.ETH_KEY) {
