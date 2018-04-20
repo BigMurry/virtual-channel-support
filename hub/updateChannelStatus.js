@@ -63,7 +63,7 @@ const handler = async (req, res, next) => {
     // update with on chain data
     await channel.update({
       agentA: agentA.toLowerCase(),
-      agentB: agentA.toLowerCase(),
+      agentB: agentB.toLowerCase(),
       depositA,
       depositB,
       challenge,
