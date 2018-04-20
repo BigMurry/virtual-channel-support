@@ -12,14 +12,14 @@ async function processChannelOpen ({
 
   const channel = await Channel.findById(channelId)
   if (!channel) {
-    let agent = await User.findById(agentA)
+    let agent = await User.findById(agentA.toLowerCase())
     if (!agent) {
       await User.build({
         address: agentA.toLowerCase()
       }).save()
     }
 
-    agent = await User.findById(agentB)
+    agent = await User.findById(agentB.toLowerCase())
     if (!agent) {
       await User.build({
         address: agentB.toLowerCase()
