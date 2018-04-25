@@ -12,9 +12,20 @@ module.exports = async ({
 }) => {
   const channelManager = getChannelManager()
   const web3 = getWeb3()
-  const isValid = await web3.eth.call({
-    to: channelManager.address,
-    data: channelManager.methods
+  console.log(
+    `isValidStateUpdate(${channelId},
+    ${nonce},
+    ${balanceA},
+    ${balanceB},
+    ${sigA},
+    ${sigB},
+    ${requireSigA},
+    ${requireSigB})`
+  )
+
+  let isValid
+  if (process.env.ETH_LOCAL) {
+    isValid = await channelManager.methods
       .isValidStateUpdate(
         channelId,
         nonce,
@@ -25,7 +36,24 @@ module.exports = async ({
         requireSigA,
         requireSigB
       )
-      .encodeABI()
-  })
+      .call()
+  } else {
+    isValid = await web3.eth.call({
+      to: channelManager.address,
+      data: channelManager.methods
+        .isValidStateUpdate(
+          channelId,
+          nonce,
+          balanceA,
+          balanceB,
+          sigA,
+          sigB,
+          requireSigA,
+          requireSigB
+        )
+        .encodeABI()
+    })
+  }
+
   return isValid
 }
