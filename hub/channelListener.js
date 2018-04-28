@@ -5,6 +5,7 @@ async function processChannelOpen ({
   channelId,
   agentA,
   agentB,
+  tokenContract,
   depositA,
   challenge
 }) {
@@ -28,6 +29,7 @@ async function processChannelOpen ({
 
     await Channel.build({
       id: channelId.toLowerCase(),
+      tokenContract: tokenContract.toLowerCase(),
       depositA: depositA.toString(),
       depositB: 0,
       agentA: agentA.toLowerCase(),
@@ -67,7 +69,6 @@ async function processChannelUpdateState ({ channelId, nonce }) {
   // check it channel exists
   let channel = await Channel.findById(channelId.toLowerCase())
   if (channel) {
-    nonce = nonce.toNumber()
     channel.latestOnChainNonce = nonce
     if (nonce > channel.nonce) {
       // this will need to get flagged on the front end
