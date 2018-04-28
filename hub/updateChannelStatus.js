@@ -19,6 +19,7 @@ const handler = async (req, res, next) => {
   const [
     agentA,
     agentB,
+    tokenContract,
     depositA,
     depositB,
     status,
@@ -50,6 +51,7 @@ const handler = async (req, res, next) => {
       .build({
         agentA: agentA.toLowerCase(),
         agentB: agentB.toLowerCase(),
+        tokenContract: tokenContract.toLowerCase(),
         depositA,
         depositB,
         challenge,
@@ -64,6 +66,7 @@ const handler = async (req, res, next) => {
     await channel.update({
       agentA: agentA.toLowerCase(),
       agentB: agentB.toLowerCase(),
+      tokenContract: tokenContract.toLowerCase(),
       depositA,
       depositB,
       challenge,
