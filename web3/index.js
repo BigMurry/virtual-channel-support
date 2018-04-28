@@ -9,7 +9,8 @@ module.exports.initWeb3 = async () => {
   if (process.env.ETH_LOCAL) {
     console.log('Connecting to local ETH node')
 
-    web3 = new Web3('ws://localhost:9545')
+    const port = process.env.ETH_PORT ? process.env.ETH_PORT : '9545'
+    web3 = new Web3(`ws://localhost:${port}`)
     const accounts = await web3.eth.getAccounts()
     accountAddress = accounts[0]
     console.log('accountAddress: ', accountAddress)
@@ -42,7 +43,29 @@ module.exports.initChannelManager = async channelManagerAddress => {
   if (!web3) {
     throw new Error('Web3 not found')
   } else {
-    channelManager = new web3.eth.Contract(artifacts.abi, channelManagerAddress)
+    if (channelManagerAddress) {
+      channelManager = new web3.eth.Contract(
+        artifacts.abi,
+        channelManagerAddress
+      )
+    } else {
+      if (process.env.ETH_LOCAL) {
+        // use truffle development address
+        if (artifacts.networks['4447'].address) {
+          console.log(
+            `Found deployed contract at ${artifacts.networks['4447'].address}`
+          )
+          channelManager = new web3.eth.Contract(
+            artifacts.abi,
+            artifacts.networks['4447'].address
+          )
+        } else {
+          throw new Error('No local deployment found')
+        }
+      } else {
+        throw new Error('No contract address specified')
+      }
+    }
   }
 }
 
