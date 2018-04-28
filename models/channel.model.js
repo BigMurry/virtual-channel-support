@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true
       },
+      tokenContract: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
       depositA: {
         type: DataTypes.TEXT,
         allowNull: false
