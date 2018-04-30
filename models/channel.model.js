@@ -47,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
       closeTime: {
         type: DataTypes.INTEGER,
         allowNull: true
+      },
+      challengeStartedBy: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      channelManagerAddress: {
+        type: DataTypes.TEXT,
+        allowNull: false
       }
     },
     {
