@@ -65,7 +65,7 @@ async function processChannelChallenge ({
   if (channel) {
     channel.status = 'challenge'
     channel.closeTime = closeTime
-    channel.challengeStartedBy = challengeStartedBy
+    channel.challengeStartedBy = challengeStartedBy.toLowerCase()
     await channel.save() // not updating the closeTime
     // TODO attempt to tell user through phone
   }

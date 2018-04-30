@@ -26,6 +26,8 @@ const handler = async (req, res, next) => {
     challenge,
     nonce,
     closeTime,
+    balanceA, // eslint-disable-line
+    balanceB, // eslint-disable-line
     challengeStartedBy
   ] = Object.values(onChainChannel)
 
@@ -64,7 +66,7 @@ const handler = async (req, res, next) => {
       latestNonce: nonce,
       latestOnChainNonce: nonce,
       closeTime: closeTime,
-      challengeStartedBy
+      challengeStartedBy: challengeStartedBy.toLowerCase()
     }
     channelAttr = { ...channelAttr, ...attributes }
   }
