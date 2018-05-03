@@ -19,16 +19,21 @@ const handler = async (req, res, next) => {
   const [
     agentA,
     agentB,
+    tokenContract,
     depositA,
     depositB,
     status,
     challenge,
     nonce,
-    closeTime
+    closeTime,
+    balanceA, // eslint-disable-line
+    balanceB, // eslint-disable-line
+    challengeStartedBy
   ] = Object.values(onChainChannel)
 
   const { Channel } = getModels()
   const channel = await Channel.findById(id.toLowerCase())
+
   let statusEnum
   switch (parseInt(status)) {
     case 0:
@@ -44,47 +49,39 @@ const handler = async (req, res, next) => {
       statusEnum = 'closed'
       break
   }
-  if (!channel) {
-    // we dont have the channel in our db, build it
-    await channel
-      .build({
-        agentA: agentA.toLowerCase(),
-        agentB: agentB.toLowerCase(),
-        depositA,
-        depositB,
-        challenge,
-        status: statusEnum,
-        latestNonce: nonce,
-        latestOnChainNonce: nonce,
-        closeTime: closeTime
-      })
-      .save()
-  } else {
-    // update with on chain data
-    await channel.update({
+
+  let channelAttr = {
+    statusEnum,
+    channelManagerAddress: channelManager.options.address.toLowerCase()
+  }
+  // closed channel loses on chain state, don't update unless not closed
+  if (channelAttr.statusEnum !== 'closed') {
+    const attributes = {
       agentA: agentA.toLowerCase(),
       agentB: agentB.toLowerCase(),
+      tokenContract: tokenContract.toLowerCase(),
       depositA,
       depositB,
       challenge,
-      status: statusEnum,
+      latestNonce: nonce,
       latestOnChainNonce: nonce,
-      closeTime
-    })
+      closeTime: closeTime,
+      challengeStartedBy: challengeStartedBy.toLowerCase()
+    }
+    channelAttr = { ...channelAttr, ...attributes }
+  }
+
+  if (!channel) {
+    // only overwrite nonce if channel doesnt exist
+    channelAttr.latestNonce = nonce
+    await channel.build(channelAttr).save()
+  } else {
+    // nonce in hub is more up to date than the onchain nonce
+    await channel.update(channelAttr)
   }
 
   res.status(200).json({
-    channel: {
-      agentA,
-      agentB,
-      depositA,
-      depositB,
-      challenge,
-      status: statusEnum,
-      latestNonce: nonce,
-      latestOnChainNonce: nonce,
-      closeTime
-    }
+    channel: channelAttr
   })
 }
 

@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true
       },
+      tokenContract: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
       depositA: {
         type: DataTypes.TEXT,
         allowNull: false
@@ -43,6 +47,14 @@ module.exports = (sequelize, DataTypes) => {
       closeTime: {
         type: DataTypes.INTEGER,
         allowNull: true
+      },
+      challengeStartedBy: {
+        type: DataTypes.TEXT,
+        allowNull: true
+      },
+      channelManagerAddress: {
+        type: DataTypes.TEXT,
+        allowNull: false
       }
     },
     {
