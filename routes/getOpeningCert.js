@@ -1,18 +1,18 @@
 const { asyncRequest } = require('../util')
-const { body, param, validationResult } = require('express-validator/check')
+const { query, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
 
-const validator = [param('id').exists(), body('depositB').exists()]
+const validator = [param('id').exists(), query('agent').optional()]
 
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { id, depositB } = matchedData(req)
+  const { id, agent } = matchedData(req)
 
-  const { VirtualChannel } = getModels()
+  const { VirtualChannel, Certificate } = getModels()
 
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
@@ -20,12 +20,24 @@ const handler = async (req, res, next) => {
       message: 'Could not find Virtual Channel'
     })
   }
+  // TODO check fingerprint and sig
 
-  vc.depositB = depositB || vc.depositB
-  await vc.save()
+  let where = {
+    virtualchannelId: id,
+    type: 'opening'
+  }
+
+  if (agent) {
+    where = {
+      ...where,
+      from: agent
+    }
+  }
+
+  const certs = await Certificate.findAll(where)
 
   res.status(200).json({
-    id
+    certs
   })
 }
 

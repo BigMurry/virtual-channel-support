@@ -12,9 +12,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: false
       },
+      type: {
+        type: DataTypes.ENUM('opening', 'closing'),
+        allowNull: false
+      },
       data: {
         type: DataTypes.TEXT,
-        allowNull: true
+        allowNull: false
+      },
+      sig: {
+        type: DataTypes.TEXT,
+        allowNull: false
+      },
+      from: {
+        type: DataTypes.TEXT,
+        allowNull: false
       }
     },
     {
