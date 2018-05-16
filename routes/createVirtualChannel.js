@@ -30,7 +30,7 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel } = getModels()
 
-  const id = await VirtualChannel.build({
+  const { id } = await VirtualChannel.build({
     agentA,
     agentB,
     depositA,

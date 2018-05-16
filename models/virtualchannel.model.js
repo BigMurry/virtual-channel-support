@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       depositB: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
       },
       balanceA: {
         type: DataTypes.TEXT,
@@ -54,6 +55,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.ENUM(
+          'Opening',
+          'Opened',
           'Empty',
           'Closing',
           'WaitingToClose',
@@ -61,7 +64,8 @@ module.exports = (sequelize, DataTypes) => {
           'Timeouted',
           'Closed'
         ),
-        allowNull: false
+        allowNull: false,
+        defaultValue: 'Opening'
       },
       latestNonce: {
         type: DataTypes.INTEGER,
