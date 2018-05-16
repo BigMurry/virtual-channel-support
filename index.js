@@ -2,10 +2,9 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const setupHub = require('./hub')
+const setupRoutes = require('./routes')
 const { initWeb3, initChannelManager } = require('./web3')
 const { connectDb } = require('./models')
-const initListener = require('./hub/channelListener')
 
 // express instance
 const app = express()
@@ -30,7 +29,7 @@ app.get('/hello', function (req, res) {
   res.send('Hello World')
 })
 
-setupHub(app)
+setupRoutes(app)
 
 app.set('trust proxy', true)
 app.set('trust proxy', 'loopback')
@@ -48,7 +47,6 @@ const server = app.listen(port, async () => {
 
   try {
     await initChannelManager(contractAddress)
-    await initListener(contractAddress)
   } catch (e) {
     console.log('e: ', e)
     console.log('Could not initialize channel manager contract, aborting.')
