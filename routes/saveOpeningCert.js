@@ -38,7 +38,8 @@ const handler = async (req, res, next) => {
     const certId = await Certificate.build({
       virtualchannelId: id,
       type: 'opening',
-      sig
+      sig,
+      from: signer
     }).save()
 
     return res.status(200).json({
