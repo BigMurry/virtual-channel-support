@@ -54,22 +54,22 @@ module.exports = app => {
 
   // certs
   app
-    .route('/virtualchannel/:id/cert/open')
+    .route('/virtualchannel/id/:id/cert/open')
     .get(getOpeningCert.validator)
     .get(getOpeningCert.handler)
 
   app
-    .route('/virtualchannel/:id/cert/open')
+    .route('/virtualchannel/id/:id/cert/open')
     .post(saveOpeningCert.validator)
     .post(saveOpeningCert.handler)
 
   app // Update
-    .route('/virtualchannel/:id/cert/open/:cid')
+    .route('/virtualchannel/id/:id/cert/open/:cid')
     .post(updateOpeningCert.validator)
     .post(updateOpeningCert.handler)
 
   app
-    .route('/virtualchannel/:id/status')
+    .route('/virtualchannel/id/:id/status')
     .post(updateVirtualChannelStatus.validator)
     .post(updateVirtualChannelStatus.handler)
 }

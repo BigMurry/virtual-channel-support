@@ -8,7 +8,7 @@ const validator = [param('id').exists(), body('status').exists()]
 
 async function verifyAllCerts (vc) {
   const { Certificate } = getModels()
-  const { agentA, agentB, ingrid } = vc
+  const { id, agentA, agentB, ingrid, depositA, depositB } = vc
   const found = {
     [agentA]: false,
     [agentB]: false,
@@ -16,17 +16,48 @@ async function verifyAllCerts (vc) {
   }
   const certs = await Certificate.findAll({
     where: {
-      virtualchannelId: vc.id
+      virtualchannelId: id
     }
   })
   certs.forEach(cert => {
-    const signer = Ethcalate.recoverSignerFromOpeningCerts(cert.sig, vc)
-    switch (signer) {
-      case vc.agentA:
-      case vc.agentB:
-      case vc.ingrid:
-        found[signer] = true
+    let sigParams
+    switch (cert.from) {
+      case agentA:
+        sigParams = {
+          id,
+          agentA,
+          agentB,
+          ingrid,
+          participantType: 'agentA',
+          depositInWei: depositA
+        }
         break
+      case agentB:
+        sigParams = {
+          id,
+          agentA,
+          agentB,
+          ingrid,
+          participantType: 'agentB',
+          depositInWei: depositB
+        }
+        break
+      case ingrid:
+        sigParams = {
+          id,
+          agentA,
+          agentB,
+          ingrid,
+          participantType: 'ingrid',
+          depositInWei: '0'
+        }
+        break
+    }
+    const signer = Ethcalate.recoverSignerFromOpeningCerts(cert.sig, sigParams)
+    if (signer === cert.from) {
+      found[signer] = true
+    } else {
+      console.log(`Found invalid cert id: ${cert.id}`)
     }
   })
   if (found[agentA] && found[agentB] && found[ingrid]) {
@@ -53,7 +84,7 @@ const handler = async (req, res, next) => {
   }
 
   switch (status) {
-    case 'open':
+    case 'opened':
       if (await verifyAllCerts(vc)) {
         vc.status = 'Opened'
         await vc.save()
