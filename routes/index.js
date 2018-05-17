@@ -1,6 +1,6 @@
 const test = require('./test')
-const getChannelByAddresses = require('./getChannelByAddresses')
-const getChannelById = require('./getChannelById')
+const getLedgerChannelByAddresses = require('./getLedgerChannelByAddresses')
+const getLedgerChannelById = require('./getLedgerChannelById')
 const getVirtualChannelByAddresses = require('./getVirtualChannelByAddresses')
 const getVirtualChannelById = require('./getVirtualChannelById')
 const createVirtualChannel = require('./createVirtualChannel')
@@ -9,7 +9,9 @@ const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
-const proposeStateUpdate = require('./proposeStateUpdate')
+const createProposeStateUpdate = require('./createProposeStateUpdate')
+const getVirtualStateUpdate = require('./getVirtualStateUpdate')
+const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
 const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
 
 module.exports = app => {
@@ -39,8 +41,18 @@ module.exports = app => {
 
   app
     .route('/virtualchannel/id/:id/proposestateupdate')
-    .post(proposeStateUpdate.validator)
-    .post(proposeStateUpdate.handler)
+    .post(createProposeStateUpdate.validator)
+    .post(createProposeStateUpdate.handler)
+
+  app
+    .route('/virtualchannel/id/:id/proposestateupdate')
+    .get(getVirtualStateUpdate.validator)
+    .get(getVirtualStateUpdate.handler)
+
+  app
+    .route('/virtualchannel/id/:id/proposestateupdate/latest')
+    .get(getLatestVirtualStateUpdate.validator)
+    .get(getLatestVirtualStateUpdate.handler)
 
   app
     .route('/virtualchannel/id/:id/proposestateupdate/verify')
@@ -49,14 +61,14 @@ module.exports = app => {
 
   // ledger channel
   app
-    .route('/channel/a/:agentA/b/:agentB')
-    .get(getChannelByAddresses.validator)
-    .get(getChannelByAddresses.handler)
+    .route('/ledgerchannel/a/:agentA/b/:agentB')
+    .get(getLedgerChannelByAddresses.validator)
+    .get(getLedgerChannelByAddresses.handler)
 
   app
-    .route('/channel/id/:id')
-    .get(getChannelById.validator)
-    .get(getChannelById.handler)
+    .route('/ledgerchannel/id/:id')
+    .get(getLedgerChannelById.validator)
+    .get(getLedgerChannelById.handler)
 
   // certs
   app
