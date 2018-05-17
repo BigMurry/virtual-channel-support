@@ -12,11 +12,11 @@ const handler = async (req, res, next) => {
   }
   const { id } = matchedData(req)
 
-  const { VirtualChannel, Transaction } = getModels()
+  const { VirtualChannel, VirtualTransaction } = getModels()
   const channel = await VirtualChannel.findById(id.toLowerCase(), {
     include: [
       {
-        model: Transaction,
+        model: VirtualTransaction,
         required: false,
         limit: 1,
         order: [['nonce', 'desc']]
