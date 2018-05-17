@@ -54,6 +54,7 @@ const handler = async (req, res, next) => {
     agentA: agentA.toLowerCase(),
     agentB: agentB.toLowerCase(),
     depositA,
+    balanceA: depositA,
     ingrid: ingrid.toLowerCase(),
     subchanAtoI,
     subchanBtoI,
