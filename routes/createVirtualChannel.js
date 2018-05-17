@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
     cert
   } = matchedData(req)
 
-  const { VirtualChannel } = getModels()
+  const { VirtualChannel, Certificate } = getModels()
 
   let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
     id,
@@ -43,7 +43,7 @@ const handler = async (req, res, next) => {
     participantType: 'agentA',
     depositInWei: depositA
   })
-  if (signer !== agentA) {
+  if (signer.toLowerCase() !== agentA.toLowerCase()) {
     return res.status(400).json({
       message: 'Cert was not signed by agentA'
     })
@@ -60,8 +60,16 @@ const handler = async (req, res, next) => {
     validity
   }).save()
 
+  const certId = await Certificate.build({
+    virtualchannelId: id,
+    type: 'opening',
+    sig: cert,
+    from: signer
+  }).save()
+
   res.status(200).json({
-    id
+    id,
+    certId
   })
 }
 
