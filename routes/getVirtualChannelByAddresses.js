@@ -18,7 +18,7 @@ const handler = async (req, res, next) => {
   const { agentA, agentB } = matchedData(req)
 
   const { VirtualChannel } = getModels()
-  const channel = await Channel.findOne({
+  const channel = await VirtualChannel.findOne({
     where: {
       [Op.and]: [
         { agentA: agentA.toLowerCase() },
