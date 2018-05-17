@@ -19,7 +19,7 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel, Certificate } = getModels()
 
-  const vc = await VirtualChannel.findById(id)
+  let vc = await VirtualChannel.findById(id)
   if (!vc) {
     return res.status(404).json({
       message: 'Virtual Channel not found'
@@ -58,6 +58,7 @@ const handler = async (req, res, next) => {
     id,
     agentB,
     depositB,
+    balanceB: depositB,
     certId
   })
 }
