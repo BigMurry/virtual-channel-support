@@ -3,8 +3,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const setupRoutes = require('./routes')
-const { initWeb3, initChannelManager } = require('./web3')
+const { initWeb3, initChannelManager, getChannelManager } = require('./web3')
 const { connectDb } = require('./models')
+const startChannelListener = require('./helpers/channelListener')
 
 // express instance
 const app = express()
@@ -49,6 +50,8 @@ const server = app.listen(port, async () => {
 
   try {
     await initChannelManager(contractAddress)
+    const channelManager = getChannelManager()
+    startChannelListener(channelManager.options.address)
   } catch (e) {
     console.log('e: ', e)
     console.log('Could not initialize channel manager contract, aborting.')
