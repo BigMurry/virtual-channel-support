@@ -40,8 +40,8 @@ module.exports = app => {
 
   app // Update
     .route('/virtualchannel/:id/cert/open/:cid')
-    .post(saveOpeningCert.validator)
-    .post(saveOpeningCert.handler)
+    .post(updateOpeningCert.validator)
+    .post(updateOpeningCert.handler)
 
   app
     .route('/virtualchannel/:id/status')
