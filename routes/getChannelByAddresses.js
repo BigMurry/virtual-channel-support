@@ -26,6 +26,7 @@ const handler = async (req, res, next) => {
       ]
     }
   })
+
   if (!channel) {
     res.status(500).json({ error: 'Error fetching from db.' })
   } else {
