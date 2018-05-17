@@ -1,8 +1,7 @@
 const Web3 = require('web3')
 const artifacts = require('../artifacts/ChannelManager.json')
 
-let web3
-let channelManager
+let web3, channelManager
 
 module.exports.initWeb3 = async () => {
   let accountAddress
