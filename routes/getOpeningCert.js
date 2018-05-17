@@ -20,7 +20,6 @@ const handler = async (req, res, next) => {
       message: 'Could not find Virtual Channel'
     })
   }
-  // TODO check fingerprint and sig
 
   let where = {
     virtualchannelId: id,
