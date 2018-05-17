@@ -2,13 +2,12 @@ const { asyncRequest } = require('../util')
 const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const { getEthcalate } = require('../web3')
+const Ethcalate = require('../../ethcalate-testing/src/src')
 
 const validator = [param('id').exists(), body('status').exists()]
 
 async function verifyAllCerts (vc) {
   const { Certificate } = getModels()
-  const ethcalate = getEthcalate()
   const { agentA, agentB, ingrid } = vc
   const found = {
     [agentA]: false,
@@ -21,7 +20,7 @@ async function verifyAllCerts (vc) {
     }
   })
   certs.forEach(cert => {
-    const signer = ethcalate.recoverSignerFromOpeningCerts(cert.sig, vc)
+    const signer = Ethcalate.recoverSignerFromOpeningCerts(cert.sig, vc)
     switch (signer) {
       case vc.agentA:
       case vc.agentB:

@@ -2,7 +2,7 @@ const { asyncRequest } = require('../util')
 const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const { getEthcalate } = require('../web3')
+const Ethcalate = require('../../ethcalate-testing/src/src')
 
 const validator = [
   param('id').exists(),
@@ -33,8 +33,7 @@ const handler = async (req, res, next) => {
     })
   }
 
-  const ethcalate = getEthcalate()
-  let signer = ethcalate.recoverSignerFromOpeningCerts(sig, vc)
+  let signer = Ethcalate.recoverSignerFromOpeningCerts(sig, vc)
   // verify cert was signed by someone in the channel
   if (
     signer === from.toLowerCase() &&
@@ -43,7 +42,8 @@ const handler = async (req, res, next) => {
     cert.sig = sig || cert.sig
     await cert.save()
     return res.status(200).json({
-      id, cid
+      id,
+      cid
     })
   } else {
     return res.status(400).json({
