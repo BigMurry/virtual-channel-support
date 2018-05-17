@@ -50,6 +50,7 @@ const handler = async (req, res, next) => {
   }).save()
 
   vc.depositB = depositB
+  vc.balanceB = depositB
   await vc.save()
 
   res.status(200).json({
