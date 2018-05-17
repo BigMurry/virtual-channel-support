@@ -1,5 +1,5 @@
 const { asyncRequest } = require('../util')
-const { param, body, validationResult } = require('express-validator/check')
+const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
 const verifyStateUpdate = require('./verifyProposedVirtualChannelStateUpdateHelper')
@@ -12,7 +12,7 @@ const validator = [
   body('sigA', 'Please provide sigA.').exists(),
   body('sigB', 'Please provide sigB.').exists(),
   body('requireSigA', 'Please provide requireSigA.').exists(),
-  body('requireSigB', 'Please provide requireSigB.').exists()
+  body('requireSigB', 'Please provide requireSigA.').exists()
 ]
 
 const handler = async (req, res, next) => {
@@ -31,17 +31,11 @@ const handler = async (req, res, next) => {
     requireSigB
   } = matchedData(req)
 
-  const { VirtualTransaction, VirtualChannel } = getModels()
+  const { VirtualChannel } = getModels()
 
-  const channel = await VirtualChannel.findById(id.toLowerCase())
+  const channel = VirtualChannel.findById(id.toLowerCase())
   if (!channel) {
-    return res.status(404).json({ error: 'No channel with that id' })
-  }
-
-  if (!requireSigA && !requireSigB) {
-    return res.status(400).json({
-      error: 'At least one signature required for a valid state update proposal'
-    })
+    return res.status(500).json({ error: 'No channel with that id' })
   }
 
   const stateObject = {
@@ -55,23 +49,11 @@ const handler = async (req, res, next) => {
     requireSigB
   }
 
-  // without verification
-  // await VirtualTransaction.build(stateObject).save()
-  // channel.latestNonce = nonce
-  // await channel.save()
-  // return res.status(200).json({ message: 'Recieved Proposed State Update' })
-
-  // with verification
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
-    await VirtualTransaction.build(stateObject).save()
-    channel.latestNonce = nonce
-    await channel.save()
-    return res
-      .status(200)
-      .json({ message: 'Proposed state update received and validated' })
+    res.status(200).json({ message: 'Proposed state update is valid.' })
   } else {
-    return res.status(400).json({ error: 'Invalid state update provided' })
+    return res.status(500).json({ error: 'Proposed state update is invalid.' })
   }
 }
 
