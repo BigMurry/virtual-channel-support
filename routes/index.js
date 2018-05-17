@@ -4,6 +4,7 @@ const getChannelById = require('./getChannelById')
 const getVirtualChannelByAddresses = require('./getVirtualChannelByAddresses')
 const getVirtualChannelById = require('./getVirtualChannelById')
 const createVirtualChannel = require('./createVirtualChannel')
+const joinVirtualChannel = require('./joinVirtualChannel')
 const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
@@ -18,6 +19,11 @@ module.exports = app => {
     .route('/virtualchannel')
     .post(createVirtualChannel.validator)
     .post(createVirtualChannel.handler)
+
+  app
+    .route('/virtualchannel/id/:id/join')
+    .post(joinVirtualChannel.validator)
+    .post(joinVirtualChannel.handler)
 
   app
     .route('/virtualchannel/a/:agentA/b/:agentB')
