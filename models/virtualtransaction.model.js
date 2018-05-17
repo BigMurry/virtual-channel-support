@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       virtualchannelId: {
-        type: DataTypes.TEXT,
+        type: DataTypes.UUID,
         allowNull: false
       },
       hash: {
@@ -18,11 +18,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       sigA: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       sigB: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       balanceA: {
         type: DataTypes.TEXT,
