@@ -29,6 +29,7 @@ const handler = async (req, res, next) => {
   const ethcalate = getEthcalate()
   let signer = ethcalate.recoverSignerFromOpeningCerts(sig, vc)
   signer = signer.toLowerCase()
+  console.log('signer: ', signer)
 
   // verify cert was signed by someone in the channel
   if (
