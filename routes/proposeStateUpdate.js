@@ -2,6 +2,7 @@ const { asyncRequest } = require('../util')
 const { param, body, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
+const verifyStateUpdate = require('./verifyProposedVirtualChannelStateUpdateHelper')
 
 const validator = [
   param('id', 'Please provide channelId.').exists(),
@@ -53,10 +54,25 @@ const handler = async (req, res, next) => {
     requireSigA,
     requireSigB
   }
-  await VirtualTransaction.build(stateObject).save()
-  channel.latestNonce = nonce
-  await channel.save()
-  return res.status(200).json({ message: 'Recieved Proposed State Update' })
+
+  // without verification
+  // await VirtualTransaction.build(stateObject).save()
+  // channel.latestNonce = nonce
+  // await channel.save()
+  // return res.status(200).json({ message: 'Recieved Proposed State Update' })
+
+  // with verification
+  const verified = await verifyStateUpdate(stateObject)
+  if (verified) {
+    await VirtualTransaction.build(stateObject).save()
+    channel.latestNonce = nonce
+    await channel.save()
+    return res
+      .status(200)
+      .json({ message: 'Proposed state update received and validated' })
+  } else {
+    return res.status(400).json({ error: 'Invalid state update provided' })
+  }
 }
 
 module.exports.validator = validator
