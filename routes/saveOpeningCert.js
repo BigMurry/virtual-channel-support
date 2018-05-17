@@ -10,6 +10,21 @@ const validator = [
   body('from').exists()
 ]
 
+async function verifyCertUniqueness (signer) {
+  /**
+   * User should have only 1 cert per open virtual channel
+   * User should not have any certs with the type 'opening' when creating a new opening cert
+   * */
+  const { Certificate } = getModels()
+  const certs = await Certificate.findAll({
+    where: {
+      from: signer,
+      type: 'opening'
+    }
+  })
+  return certs.length === 0
+}
+
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -33,7 +48,7 @@ const handler = async (req, res, next) => {
   // verify cert was signed by someone in the channel
   if (
     signer === from.toLowerCase() &&
-    (signer === vc.agentA || signer === vc.agentB || signer === vc.ingrid)
+    (signer === vc.agentA || signer === vc.agentB || signer === vc.ingrid) && await verifyCertUniqueness(signer)
   ) {
     const certId = await Certificate.build({
       virtualchannelId: id,
