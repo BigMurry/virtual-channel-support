@@ -1,6 +1,8 @@
 const test = require('./test')
 const getChannelByAddresses = require('./getChannelByAddresses')
 const getChannelById = require('./getChannelById')
+const getChannelByAddresses = require('./getVirtualChannelByAddresses')
+const getChannelById = require('./getVirtualChannelById')
 const createVirtualChannel = require('./createVirtualChannel')
 const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
@@ -17,6 +19,17 @@ module.exports = app => {
     .post(createVirtualChannel.validator)
     .post(createVirtualChannel.handler)
 
+  app
+    .route('/virtualchannel/a/:agentA/b/:agentB')
+    .get(getVirtualChannelByAddresses.validator)
+    .get(getVirtualChannelByAddresses.handler)
+
+  app
+    .route('/virtualchannel/id/:id')
+    .get(getVirtualChannelById.validator)
+    .get(getVirtualChannelById.handler)
+
+  // ledger channel
   app
     .route('/channel/a/:agentA/b/:agentB')
     .get(getChannelByAddresses.validator)
