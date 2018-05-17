@@ -31,10 +31,10 @@ const handler = async (req, res, next) => {
   const { VirtualChannel } = getModels()
 
   const { id } = await VirtualChannel.build({
-    agentA,
-    agentB,
+    agentA: agentA.toLowerCase(),
+    agentB: agentB.toLowerCase(),
     depositA,
-    ingrid,
+    ingrid: ingrid.toLowerCase(),
     subchanAtoI,
     subchanBtoI,
     validity

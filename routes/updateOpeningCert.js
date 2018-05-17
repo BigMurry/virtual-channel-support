@@ -6,6 +6,7 @@ const { getEthcalate } = require('../web3')
 
 const validator = [
   param('id').exists(),
+  param('cid').exists(),
   body('sig').exists(),
   body('from').exists()
 ]
@@ -15,7 +16,7 @@ const handler = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { id, sig, from } = matchedData(req)
+  const { id, sig, from, cid } = matchedData(req)
 
   const { VirtualChannel, Certificate } = getModels()
 
@@ -25,25 +26,24 @@ const handler = async (req, res, next) => {
       message: 'Could not find Virtual Channel'
     })
   }
+  const cert = await Certificate.findById(cid)
+  if (!cert) {
+    return res.status(404).json({
+      message: 'Could not find Certificate'
+    })
+  }
 
   const ethcalate = getEthcalate()
   let signer = ethcalate.recoverSignerFromOpeningCerts(sig, vc)
-  signer = signer.toLowerCase()
-
   // verify cert was signed by someone in the channel
   if (
     signer === from.toLowerCase() &&
     (signer === vc.agentA || signer === vc.agentB || signer === vc.ingrid)
   ) {
-    const certId = await Certificate.build({
-      virtualchannelId: id,
-      type: 'opening',
-      sig,
-      from: signer
-    }).save()
-
+    cert.sig = sig || cert.sig
+    await cert.save()
     return res.status(200).json({
-      id: certId
+      id, cid
     })
   } else {
     return res.status(400).json({
