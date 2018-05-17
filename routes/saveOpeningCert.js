@@ -40,15 +40,22 @@ const handler = async (req, res, next) => {
       message: 'Could not find Virtual Channel'
     })
   }
-
-  let signer = Ethcalate.recoverSignerFromOpeningCerts(sig, vc)
+  const { agentA, agentB, ingrid } = vc
+  let signer = Ethcalate.recoverSignerFromOpeningCerts(sig, {
+    id,
+    agentA,
+    agentB,
+    ingrid,
+    participantType: 'ingrid',
+    depositInWei: '0'
+  })
   signer = signer.toLowerCase()
   console.log('signer: ', signer)
 
   // verify cert was signed by someone in the channel
   if (
     signer === from.toLowerCase() &&
-    (signer === vc.agentA || signer === vc.agentB || signer === vc.ingrid) &&
+    signer === ingrid &&
     (await verifyCertUniqueness(signer))
   ) {
     const certId = await Certificate.build({
@@ -62,6 +69,7 @@ const handler = async (req, res, next) => {
       id: certId
     })
   } else {
+    console.log(signer)
     return res.status(400).json({
       message: 'Signer was not one of the virtual channel participants'
     })
