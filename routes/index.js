@@ -13,6 +13,16 @@ module.exports = app => {
     .post(createVirtualChannel.validator)
     .post(createVirtualChannel.handler)
 
+  app
+    .route('/channel/a/:agentA/b/:agentB')
+    .get(getChannelByAddresses.validator)
+    .get(getChannelByAddresses.handler)
+
+  app
+    .route('/channel/id/:id')
+    .get(getChannelById.validator)
+    .get(getChannelById.handler)
+
   // certs
   app
     .route('/virtualchannel/:id/cert/open')
