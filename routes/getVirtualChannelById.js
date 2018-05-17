@@ -12,8 +12,17 @@ const handler = async (req, res, next) => {
   }
   const { id } = matchedData(req)
 
-  const { VirtualChannel } = getModels()
-  const channel = await VirtualChannel.findById(id)
+  const { VirtualChannel, VirtualTransaction } = getModels()
+  const channel = await VirtualChannel.findById(id.toLowerCase(), {
+    include: [
+      {
+        model: VirtualTransaction,
+        required: false,
+        limit: 1,
+        order: [['nonce', 'desc']]
+      }
+    ]
+  })
 
   if (!channel) {
     res.status(404).json({ error: 'Could not find channel.' })

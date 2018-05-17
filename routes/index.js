@@ -9,6 +9,7 @@ const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
+const proposeStateUpdate = require('./proposeStateUpdate')
 
 module.exports = app => {
   // test
@@ -34,6 +35,11 @@ module.exports = app => {
     .route('/virtualchannel/id/:id')
     .get(getVirtualChannelById.validator)
     .get(getVirtualChannelById.handler)
+
+  app
+    .route('/virtualchannel/id/:id/proposestateupdate')
+    .post(proposeStateUpdate.validator)
+    .post(proposeStateUpdate.handler)
 
   // ledger channel
   app
