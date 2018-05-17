@@ -89,7 +89,7 @@ async function processChannelClose ({ channelId }) {
   }
 }
 
-module.exports = async contractAddress => {
+module.exports = contractAddress => {
   const channelManager = getChannelManager()
 
   channelManager.events.allEvents(async (err, event) => {

@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       channelManagerAddress: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       }
     },
     {
