@@ -2,15 +2,18 @@ const { asyncRequest } = require('../util')
 const { body, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
+const Ethcalate = require('../../ethcalate-testing/src/src')
 
 const validator = [
+  body('id').exists(),
   body('agentA').exists(),
   body('agentB').exists(),
   body('depositA').exists(),
   body('ingrid').exists(),
   body('subchanAtoI').exists(),
   body('subchanBtoI').exists(),
-  body('validity').exists()
+  body('validity').exists(),
+  body('cert').exists()
 ]
 
 const handler = async (req, res, next) => {
@@ -19,18 +22,35 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
   const {
+    id,
     agentA,
     agentB,
     depositA,
     ingrid,
     subchanAtoI,
     subchanBtoI,
-    validity
+    validity,
+    cert
   } = matchedData(req)
 
   const { VirtualChannel } = getModels()
 
-  const { id } = await VirtualChannel.build({
+  let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
+    id,
+    agentA,
+    agentB,
+    ingrid,
+    participantType: 'agentA',
+    depositInWei: depositA
+  })
+  if (signer !== agentA) {
+    return res.status(400).json({
+      message: 'Cert was not signed by agentA'
+    })
+  }
+
+  await VirtualChannel.build({
+    id,
     agentA: agentA.toLowerCase(),
     agentB: agentB.toLowerCase(),
     depositA,
