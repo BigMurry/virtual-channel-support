@@ -1,4 +1,6 @@
 const test = require('./test')
+const getChannelByAddresses = require('./getChannelByAddresses')
+const getChannelById = require('./getChannelById')
 const createVirtualChannel = require('./createVirtualChannel')
 const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
