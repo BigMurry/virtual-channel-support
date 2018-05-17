@@ -14,6 +14,7 @@ const getVirtualStateUpdate = require('./getVirtualStateUpdate')
 const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
 const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
 const getVirtualTransactionById = require('./getVirtualTransactionById')
+const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByChannelNonce')
 
 module.exports = app => {
   // test
@@ -65,6 +66,11 @@ module.exports = app => {
     .route('/virtualtransaction/:id')
     .get(getVirtualTransactionById.validator)
     .get(getVirtualTransactionById.handler)
+
+  app
+    .route('/virtualtransaction')
+    .get(getVirtualTransactionByChannelNonce.validator)
+    .get(getVirtualTransactionByChannelNonce.handler)
 
   // ledger channel
   app
