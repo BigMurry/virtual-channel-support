@@ -24,7 +24,7 @@ module.exports = async ({
   )
   const web3 = getWeb3()
   const { VirtualChannel } = getModels()
-  const channel = VirtualChannel.findById(virtualchannelId.toLowerCase())
+  const channel = await VirtualChannel.findById(virtualchannelId.toLowerCase())
   if (!channel) {
     console.log('No virtual channel with that ID')
     return false
@@ -36,15 +36,15 @@ module.exports = async ({
     console.log('At least one signature required.')
     return false
   }
-  if (!requireSigA) {
+  if (requireSigA) {
     if (sigA) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigA, {
-        virtualchannelId,
-        nonce,
+        id: virtualchannelId,
+        nonce: nonce.toString(),
         balanceA,
         balanceB
       })
-      if (signer !== channel.agentB) {
+      if (signer !== channel.agentA) {
         console.log('Incorrect signer detected for proposed state.')
         return false
       }
@@ -53,11 +53,11 @@ module.exports = async ({
       return false
     }
   }
-  if (!requireSigB) {
+  if (requireSigB) {
     if (sigB) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigB, {
-        virtualchannelId,
-        nonce,
+        id: virtualchannelId,
+        nonce: nonce.toString(),
         balanceA,
         balanceB
       })
@@ -70,18 +70,18 @@ module.exports = async ({
       return false
     }
   }
-  console.log('Signer of proposed state:', signer)
-
   // valid state update params are sent to an active channel?
-  if (balanceA + balanceB !== channel.depositA + channel.depositB) {
+  if (
+    Number(balanceA) + Number(balanceB) !==
+    Number(channel.depositA) + Number(channel.depositB)
+  ) {
     console.log('Balances do not add to deposits')
-    return false
-  } else if (channel.status !== 'Opened') {
-    console.log('channel.status:', channel.status)
-    console.log('Virtual Channel cannot accept state updates in this phase.')
     return false
   } else if (nonce <= channel.nonce) {
     console.log('Nonce must be greater than latest channel noncce.')
+    return false
+  } else if (channel.status !== 'Opened') {
+    console.log('Virtual channel cannot accept state updates at this time.')
     return false
   }
 

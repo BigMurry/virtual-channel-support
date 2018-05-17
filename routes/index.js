@@ -9,7 +9,9 @@ const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
-const proposeStateUpdate = require('./proposeStateUpdate')
+const createProposeStateUpdate = require('./createProposeStateUpdate')
+const getVirtualStateUpdate = require('./getVirtualStateUpdate')
+const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
 const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
 
 module.exports = app => {
@@ -39,8 +41,18 @@ module.exports = app => {
 
   app
     .route('/virtualchannel/id/:id/proposestateupdate')
-    .post(proposeStateUpdate.validator)
-    .post(proposeStateUpdate.handler)
+    .post(createProposeStateUpdate.validator)
+    .post(createProposeStateUpdate.handler)
+
+  app
+    .route('/virtualchannel/id/:id/proposestateupdate')
+    .get(getVirtualStateUpdate.validator)
+    .get(getVirtualStateUpdate.handler)
+
+  app
+    .route('/virtualchannel/id/:id/proposestateupdate/latest')
+    .get(getLatestVirtualStateUpdate.validator)
+    .get(getLatestVirtualStateUpdate.handler)
 
   app
     .route('/virtualchannel/id/:id/proposestateupdate/verify')
