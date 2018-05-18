@@ -39,7 +39,7 @@ module.exports = async ({
   if (requireSigA) {
     if (sigA) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigA, {
-        id: virtualchannelId,
+        id: virtualchannelId.toLowerCase(),
         nonce: nonce.toString(),
         balanceA,
         balanceB
@@ -56,7 +56,7 @@ module.exports = async ({
   if (requireSigB) {
     if (sigB) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigB, {
-        id: virtualchannelId,
+        id: virtualchannelId.toLowerCase(),
         nonce: nonce.toString(),
         balanceA,
         balanceB
