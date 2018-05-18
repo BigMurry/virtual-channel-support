@@ -10,6 +10,7 @@ const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
 const createProposeStateUpdate = require('./createProposeStateUpdate')
+const createLedgerStateUpdate = require('./createLedgerStateUpdate')
 const getVirtualStateUpdate = require('./getVirtualStateUpdate')
 const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
 const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
@@ -69,6 +70,11 @@ module.exports = app => {
     .route('/ledgerchannel/id/:id')
     .get(getLedgerChannelById.validator)
     .get(getLedgerChannelById.handler)
+
+  app
+    .route('/ledgerchannel/id/:id/stateupdate')
+    .post(createLedgerStateUpdate.validator)
+    .post(createLedgerStateUpdate.handler)
 
   // certs
   app
