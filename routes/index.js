@@ -10,11 +10,11 @@ const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
-const createProposeStateUpdate = require('./createProposeStateUpdate')
+const createStateUpdate = require('./createStateUpdate')
 const createLedgerStateUpdate = require('./createLedgerStateUpdate')
 const getVirtualStateUpdate = require('./getVirtualStateUpdate')
 const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
-const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
+const verifyVirtualChannelStateUpdate = require('./verifyVirtualChannelStateUpdate')
 const getVirtualTransactionById = require('./getVirtualTransactionById')
 const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByChannelNonce')
 const getTransactionById = require('./getTransactionById')
@@ -52,24 +52,24 @@ module.exports = app => {
     .get(getVirtualChannels.handler)
 
   app
-    .route('/virtualchannel/id/:id/proposestateupdate')
-    .post(createProposeStateUpdate.validator)
-    .post(createProposeStateUpdate.handler)
+    .route('/virtualchannel/id/:id/stateupdate')
+    .post(createStateUpdate.validator)
+    .post(createStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/proposestateupdate')
+    .route('/virtualchannel/id/:id/stateupdate')
     .get(getVirtualStateUpdate.validator)
     .get(getVirtualStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/proposestateupdate/latest')
+    .route('/virtualchannel/id/:id/stateupdate/latest')
     .get(getLatestVirtualStateUpdate.validator)
     .get(getLatestVirtualStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/proposestateupdate/verify')
-    .post(verifyProposedVirtualChannelStateUpdate.validator)
-    .post(verifyProposedVirtualChannelStateUpdate.handler)
+    .route('/virtualchannel/id/:id/stateupdate/verify')
+    .post(verifyVirtualChannelStateUpdate.validator)
+    .post(verifyVirtualChannelStateUpdate.handler)
 
   // virtual transactions
   app

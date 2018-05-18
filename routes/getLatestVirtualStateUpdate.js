@@ -6,7 +6,7 @@ const { Op } = require('sequelize')
 
 const validator = [
   param('id', 'Please provide channel ID.').exists(),
-  query('sig', 'Please provide either "sigA" or "sigB".').exists()
+  query('sig', 'Please provide either "sigA" or "sigB" or both.').exists()
 ]
 
 const handler = async (req, res, next) => {
@@ -15,7 +15,18 @@ const handler = async (req, res, next) => {
     return res.status(422).json({ errors: errors.mapped() })
   }
   const { id, sig } = matchedData(req)
-  console.log('sig: ', sig)
+  let where = {}
+  if (Array.isArray(sig)) {
+    sig.forEach(s => {
+      where[s] = {
+        [Op.ne]: ''
+      }
+    })
+  } else {
+    where[sig] = {
+      [Op.ne]: ''
+    }
+  }
 
   const { VirtualTransaction, VirtualChannel } = getModels()
   const virtualChannel = await VirtualChannel.findById(id.toLowerCase(), {
@@ -25,11 +36,7 @@ const handler = async (req, res, next) => {
         required: false,
         limit: 1,
         order: [['nonce', 'desc']],
-        where: {
-          [sig]: {
-            [Op.ne]: ''
-          }
-        }
+        where
       }
     ]
   })
