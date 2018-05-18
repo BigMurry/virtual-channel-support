@@ -20,6 +20,7 @@ const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByCh
 const getTransactionById = require('./getTransactionById')
 const getTransactionByChannelNonce = require('./getTransactionByChannelNonce')
 const cosignVirtualStateUpdate = require('./cosignVirtualStateUpdate')
+const checkpointVirtualChannel = require('./checkpointVirtualChannel')
 
 module.exports = app => {
   // test
@@ -70,6 +71,11 @@ module.exports = app => {
     .route('/virtualchannel/id/:id/stateupdate/verify')
     .post(verifyVirtualStateUpdate.validator)
     .post(verifyVirtualStateUpdate.handler)
+
+  app
+    .route('/virtualchannel/id/:id/checkpoint')
+    .post(checkpointVirtualChannel.validator)
+    .post(checkpointVirtualChannel.handler)
 
   // virtual transactions
   app
