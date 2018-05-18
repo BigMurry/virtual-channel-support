@@ -2,7 +2,7 @@ const { asyncRequest } = require('../util')
 const { param, body, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const verifyStateUpdate = require('../helpers/verifyStateUpdate')
+const verifyStateUpdate = require('../helpers/verifyLedgerStateUpdate')
 
 const validator = [
   param('id', 'Please provide channelId.').exists(),

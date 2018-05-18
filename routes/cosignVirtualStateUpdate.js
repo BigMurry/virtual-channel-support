@@ -2,7 +2,7 @@ const { asyncRequest } = require('../util')
 const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const verifyStateUpdate = require('./verifyProposedVirtualChannelStateUpdateHelper')
+const verifyStateUpdate = require('../helpers/verifyVirtualStateUpdate')
 
 const validator = [
   param('id', 'Please provide transaction ID.').exists(),

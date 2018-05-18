@@ -10,16 +10,16 @@ const getOpeningCert = require('./getOpeningCert')
 const saveOpeningCert = require('./saveOpeningCert')
 const updateOpeningCert = require('./updateOpeningCert')
 const updateVirtualChannelStatus = require('./updateVirtualChannelStatus')
-const createStateUpdate = require('./createStateUpdate')
+const createVirtualStateUpdate = require('./createVirtualStateUpdate')
 const createLedgerStateUpdate = require('./createLedgerStateUpdate')
 const getVirtualStateUpdate = require('./getVirtualStateUpdate')
 const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
-const verifyVirtualChannelStateUpdate = require('./verifyVirtualChannelStateUpdate')
+const verifyVirtualStateUpdate = require('./verifyVirtualStateUpdate')
 const getVirtualTransactionById = require('./getVirtualTransactionById')
 const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByChannelNonce')
 const getTransactionById = require('./getTransactionById')
 const getTransactionByChannelNonce = require('./getTransactionByChannelNonce')
-const cosignStateUpdate = require('./cosignStateUpdate')
+const cosignVirtualStateUpdate = require('./cosignVirtualStateUpdate')
 
 module.exports = app => {
   // test
@@ -53,8 +53,8 @@ module.exports = app => {
 
   app
     .route('/virtualchannel/id/:id/stateupdate')
-    .post(createStateUpdate.validator)
-    .post(createStateUpdate.handler)
+    .post(createVirtualStateUpdate.validator)
+    .post(createVirtualStateUpdate.handler)
 
   app
     .route('/virtualchannel/id/:id/stateupdate')
@@ -68,8 +68,8 @@ module.exports = app => {
 
   app
     .route('/virtualchannel/id/:id/stateupdate/verify')
-    .post(verifyVirtualChannelStateUpdate.validator)
-    .post(verifyVirtualChannelStateUpdate.handler)
+    .post(verifyVirtualStateUpdate.validator)
+    .post(verifyVirtualStateUpdate.handler)
 
   // virtual transactions
   app
@@ -84,8 +84,8 @@ module.exports = app => {
 
   app
     .route('/virtualtransaction/:id/cosign')
-    .post(cosignStateUpdate.validator)
-    .post(cosignStateUpdate.handler)
+    .post(cosignVirtualStateUpdate.validator)
+    .post(cosignVirtualStateUpdate.handler)
 
   // ledger channel
   app

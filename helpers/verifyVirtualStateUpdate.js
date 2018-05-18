@@ -22,7 +22,6 @@ module.exports = async ({
     ${requireSigA},
     ${requireSigB})`
   )
-  const web3 = getWeb3()
   const { VirtualChannel } = getModels()
   const channel = await VirtualChannel.findById(virtualchannelId.toLowerCase())
   if (!channel) {
