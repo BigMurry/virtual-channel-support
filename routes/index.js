@@ -3,6 +3,7 @@ const getLedgerChannelByAddresses = require('./getLedgerChannelByAddresses')
 const getLedgerChannelById = require('./getLedgerChannelById')
 const getVirtualChannelByAddresses = require('./getVirtualChannelByAddresses')
 const getVirtualChannelById = require('./getVirtualChannelById')
+const getVirtualChannels = require('./getVirtualChannels')
 const createVirtualChannel = require('./createVirtualChannel')
 const joinVirtualChannel = require('./joinVirtualChannel')
 const getOpeningCert = require('./getOpeningCert')
@@ -14,6 +15,10 @@ const createLedgerStateUpdate = require('./createLedgerStateUpdate')
 const getVirtualStateUpdate = require('./getVirtualStateUpdate')
 const getLatestVirtualStateUpdate = require('./getLatestVirtualStateUpdate')
 const verifyProposedVirtualChannelStateUpdate = require('./verifyProposedVirtualChannelStateUpdate')
+const getVirtualTransactionById = require('./getVirtualTransactionById')
+const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByChannelNonce')
+const getTransactionById = require('./getTransactionById')
+const getTransactionByChannelNonce = require('./getTransactionByChannelNonce')
 
 module.exports = app => {
   // test
@@ -41,6 +46,11 @@ module.exports = app => {
     .get(getVirtualChannelById.handler)
 
   app
+    .route('/virtualchannel')
+    .get(getVirtualChannels.validator)
+    .get(getVirtualChannels.handler)
+
+  app
     .route('/virtualchannel/id/:id/proposestateupdate')
     .post(createProposeStateUpdate.validator)
     .post(createProposeStateUpdate.handler)
@@ -60,6 +70,17 @@ module.exports = app => {
     .post(verifyProposedVirtualChannelStateUpdate.validator)
     .post(verifyProposedVirtualChannelStateUpdate.handler)
 
+  // virtual transactions
+  app
+    .route('/virtualtransaction/:id')
+    .get(getVirtualTransactionById.validator)
+    .get(getVirtualTransactionById.handler)
+
+  app
+    .route('/virtualtransaction')
+    .get(getVirtualTransactionByChannelNonce.validator)
+    .get(getVirtualTransactionByChannelNonce.handler)
+
   // ledger channel
   app
     .route('/ledgerchannel/a/:agentA/b/:agentB')
@@ -75,6 +96,17 @@ module.exports = app => {
     .route('/ledgerchannel/id/:id/stateupdate')
     .post(createLedgerStateUpdate.validator)
     .post(createLedgerStateUpdate.handler)
+
+  // ledger channel transactions
+  app
+    .route('/transaction/:id')
+    .get(getTransactionById.validator)
+    .get(getTransactionById.handler)
+
+  app
+    .route('/transaction')
+    .get(getTransactionByChannelNonce.validator)
+    .get(getTransactionByChannelNonce.handler)
 
   // certs
   app

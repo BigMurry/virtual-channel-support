@@ -55,13 +55,6 @@ const handler = async (req, res, next) => {
     requireSigB
   }
 
-  // without verification
-  // await VirtualTransaction.build(stateObject).save()
-  // channel.latestNonce = nonce
-  // await channel.save()
-  // return res.status(200).json({ message: 'Recieved Proposed State Update' })
-
-  // with verification
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
     await VirtualTransaction.build(stateObject).save()
