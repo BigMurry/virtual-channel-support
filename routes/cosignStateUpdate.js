@@ -2,7 +2,6 @@ const { asyncRequest } = require('../util')
 const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const { getWeb3 } = require('../web3')
 const verifyStateUpdate = require('./verifyProposedVirtualChannelStateUpdateHelper')
 
 const validator = [
@@ -28,14 +27,6 @@ const handler = async (req, res, next) => {
     res.status(404).json({ error: 'Could not find channel.' })
   }
   console.log('transaction:', transaction)
-  // recreate hash
-  const web3 = getWeb3()
-  const hash = web3.utils.soliditySha3(
-    { type: 'bytes32', value: transaction.virtualchannelId },
-    { type: 'uint256', value: transaction.nonce },
-    { type: 'uint256', value: transaction.balanceA },
-    { type: 'uint256', value: transaction.balanceB }
-  )
   // verify signature passed in is correct
   const stateObject = {
     virtualchannelId: transaction.virtualchannelId,
@@ -50,7 +41,6 @@ const handler = async (req, res, next) => {
 
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
-    transaction.hash = hash
     if (isAgentA) {
       transaction.sigA = sig
     } else {
