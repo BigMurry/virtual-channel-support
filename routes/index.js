@@ -19,6 +19,7 @@ const getVirtualTransactionById = require('./getVirtualTransactionById')
 const getVirtualTransactionByChannelNonce = require('./getVirtualTransactionByChannelNonce')
 const getTransactionById = require('./getTransactionById')
 const getTransactionByChannelNonce = require('./getTransactionByChannelNonce')
+const cosignStateUpdate = require('./cosignStateUpdate')
 
 module.exports = app => {
   // test
@@ -80,6 +81,11 @@ module.exports = app => {
     .route('/virtualtransaction')
     .get(getVirtualTransactionByChannelNonce.validator)
     .get(getVirtualTransactionByChannelNonce.handler)
+
+  app
+    .route('/virtualtransaction/:id/cosign')
+    .post(cosignStateUpdate.validator)
+    .post(cosignStateUpdate.handler)
 
   // ledger channel
   app
