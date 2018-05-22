@@ -77,7 +77,7 @@ module.exports = async ({
     console.log('Balances do not add to deposits')
     return false
   } else if (nonce <= channel.nonce) {
-    console.log('Nonce must be greater than latest channel noncce.')
+    console.log('Nonce must be greater than latest channel nonce.')
     return false
   } else if (channel.status !== 'Opened') {
     console.log('Virtual channel cannot accept state updates at this time.')
