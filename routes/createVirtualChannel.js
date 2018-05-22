@@ -52,7 +52,7 @@ const handler = async (req, res, next) => {
   // dont open VC if LC is inactive
   const lc1 = await Channel.findById(subchanAtoI)
   const lc2 = await Channel.findById(subchanBtoI)
-  if (lc1.status !== 'open' || lc2.status !== 'open') {
+  if (lc1.status !== 'joined' || lc2.status !== 'joined') {
     return res.status(400).json({
       message: 'One or more of the underlying ledger channels are not in open phase.'
     })
