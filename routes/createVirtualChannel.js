@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
     cert
   } = matchedData(req)
 
-  const { VirtualChannel, Certificate } = getModels()
+  const { VirtualChannel, Certificate, Channel } = getModels()
 
   let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
     id,
@@ -46,6 +46,15 @@ const handler = async (req, res, next) => {
   if (signer.toLowerCase() !== agentA.toLowerCase()) {
     return res.status(400).json({
       message: 'Cert was not signed by agentA'
+    })
+  }
+
+  // dont open VC if LC is inactive
+  const lc1 = await Channel.findById(subchanAtoI)
+  const lc2 = await Channel.findById(subchanBtoI)
+  if (lc1.status !== 'open' || lc2.status !== 'open') {
+    return res.status(400).json({
+      message: 'One or more of the underlying ledger channels are not in open phase.'
     })
   }
 
