@@ -38,6 +38,10 @@ const handler = async (req, res, next) => {
     return res.status(404).json({ error: 'No channel with that id' })
   }
 
+  if (channel.status !== 'Opened') {
+    return res.status(404).json({ error: 'Virtual channel status invalid' })
+  }
+
   if (!requireSigA && !requireSigB) {
     return res.status(400).json({
       error:
