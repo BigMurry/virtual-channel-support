@@ -21,6 +21,7 @@ const getLedgerTransactionById = require('./getLedgerTransactionById')
 const getLedgerTransactionByChannelNonce = require('./getLedgerTransactionByChannelNonce')
 const cosignVirtualStateUpdate = require('./cosignVirtualStateUpdate')
 const checkpointVirtualChannel = require('./checkpointVirtualChannel')
+const deltaVcNotOpened = require('./deltaVcNotOpened')
 
 module.exports = app => {
   // test
@@ -140,4 +141,10 @@ module.exports = app => {
     .route('/virtualchannel/id/:id/status')
     .post(updateVirtualChannelStatus.validator)
     .post(updateVirtualChannelStatus.handler)
+
+  // checks
+  app
+    .route('/virtualchannel/id/:id/check/notopened')
+    .post(deltaVcNotOpened.validator)
+    .post(deltaVcNotOpened.handler)
 }
