@@ -49,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM(
           'Opening',
           'Opened',
+          'NotOpened',
           'Empty',
           'Closing',
           'WaitingToClose',
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0
       },
-      deltaStartTime: {
+      deltaStartTimeSeconds: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
