@@ -13,6 +13,7 @@ const validator = [
   body('subchanAtoI').exists(),
   body('subchanBtoI').exists(),
   body('validity').exists(),
+  body('closingTimeSeconds').exists(),
   body('cert').exists()
 ]
 
@@ -30,18 +31,24 @@ const handler = async (req, res, next) => {
     subchanAtoI,
     subchanBtoI,
     validity,
-    cert
+    cert,
+    closingTimeSeconds
   } = matchedData(req)
 
   const { VirtualChannel, Certificate, Channel } = getModels()
+
+  console.log('closingTimeSeconds: ', closingTimeSeconds)
 
   let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
     id,
     agentA,
     agentB,
     ingrid,
+    subchanAtoI,
+    subchanBtoI,
     participantType: 'agentA',
-    depositInWei: depositA
+    depositInWei: depositA,
+    closingTimeSeconds
   })
   if (signer.toLowerCase() !== agentA.toLowerCase()) {
     return res.status(400).json({
@@ -52,9 +59,10 @@ const handler = async (req, res, next) => {
   // dont open VC if LC is inactive
   const lc1 = await Channel.findById(subchanAtoI)
   const lc2 = await Channel.findById(subchanBtoI)
-  if (lc1.status !== 'open' || lc2.status !== 'open') {
+  if (lc1.status !== 'joined' || lc2.status !== 'joined') {
     return res.status(400).json({
-      message: 'One or more of the underlying ledger channels are not in open phase.'
+      message:
+        'One or more of the underlying ledger channels are not in open phase.'
     })
   }
 
@@ -67,7 +75,8 @@ const handler = async (req, res, next) => {
     ingrid: ingrid.toLowerCase(),
     subchanAtoI,
     subchanBtoI,
-    validity
+    validity,
+    closingTimeSeconds
   }).save()
 
   const certId = await Certificate.build({

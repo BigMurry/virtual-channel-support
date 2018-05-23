@@ -45,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      closingTimeSeconds: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
       status: {
         type: DataTypes.ENUM(
           'Opening',
