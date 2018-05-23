@@ -8,7 +8,17 @@ const validator = [param('id').exists(), body('status').exists()]
 
 async function verifyAllCerts (vc) {
   const { Certificate } = getModels()
-  const { id, agentA, agentB, ingrid, depositA, depositB } = vc
+  const {
+    id,
+    agentA,
+    agentB,
+    ingrid,
+    depositA,
+    depositB,
+    subchanAtoI,
+    subchanBtoI,
+    closingTimeSeconds
+  } = vc
   const found = {
     [agentA]: false,
     [agentB]: false,
@@ -29,7 +39,10 @@ async function verifyAllCerts (vc) {
           agentB,
           ingrid,
           participantType: 'agentA',
-          depositInWei: depositA
+          depositInWei: depositA,
+          subchanAtoI,
+          subchanBtoI,
+          closingTimeSeconds
         }
         break
       case agentB:
@@ -39,7 +52,10 @@ async function verifyAllCerts (vc) {
           agentB,
           ingrid,
           participantType: 'agentB',
-          depositInWei: depositB
+          depositInWei: depositB,
+          subchanAtoI,
+          subchanBtoI,
+          closingTimeSeconds
         }
         break
       case ingrid:
@@ -49,7 +65,10 @@ async function verifyAllCerts (vc) {
           agentB,
           ingrid,
           participantType: 'ingrid',
-          depositInWei: '0'
+          depositInWei: '0',
+          subchanAtoI,
+          subchanBtoI,
+          closingTimeSeconds
         }
         break
     }

@@ -12,7 +12,8 @@ const validator = [
   body('sigA', 'Please provide sigA.').exists(),
   body('sigB', 'Please provide sigB.').exists(),
   body('requireSigA', 'Please provide requireSigA.').exists(),
-  body('requireSigB', 'Please provide requireSigB.').exists()
+  body('requireSigB', 'Please provide requireSigB.').exists(),
+  body('virtualchannelId', 'Please provide requireSigB.').optional()
 ]
 
 const handler = async (req, res, next) => {
@@ -28,7 +29,8 @@ const handler = async (req, res, next) => {
     sigA,
     sigB,
     requireSigA,
-    requireSigB
+    requireSigB,
+    virtualchannelId
   } = matchedData(req)
 
   const { Transaction, Channel } = getModels()
@@ -58,7 +60,7 @@ const handler = async (req, res, next) => {
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
     res.status(200).json({ message: 'State valid and updated' })
-    await Transaction.build(stateObject).save()
+    await Transaction.build({ ...stateObject, virtualchannelId }).save()
     channel.latestNonce = nonce
     await channel.save()
   } else {
