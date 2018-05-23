@@ -40,14 +40,24 @@ const handler = async (req, res, next) => {
       message: 'Could not find Virtual Channel'
     })
   }
-  const { agentA, agentB, ingrid } = vc
+  const {
+    agentA,
+    agentB,
+    ingrid,
+    subchanAtoI,
+    subchanBtoI,
+    closingTimeSeconds
+  } = vc
   let signer = Ethcalate.recoverSignerFromOpeningCerts(sig, {
     id,
     agentA,
     agentB,
     ingrid,
     participantType: 'ingrid',
-    depositInWei: '0'
+    depositInWei: '0',
+    subchanAtoI,
+    subchanBtoI,
+    closingTimeSeconds
   })
   signer = signer.toLowerCase()
   console.log('signer: ', signer)
