@@ -25,20 +25,30 @@ const handler = async (req, res, next) => {
       message: 'Virtual Channel not found'
     })
   }
-  if (vc.status !== 'opening') {
+  if (vc.status.toLowerCase() !== 'opening') {
     return res.status(400).json({
       message: 'Channel cannot be joined at this time.'
     })
   }
-  const { agentA, agentB, ingrid } = vc
+  const {
+    agentA,
+    agentB,
+    ingrid,
+    subchanAtoI,
+    subchanBtoI,
+    closingTimeSeconds
+  } = vc
 
   let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
     id,
     agentA,
     agentB,
     ingrid,
+    subchanAtoI,
+    subchanBtoI,
     participantType: 'agentB',
-    depositInWei: depositB
+    depositInWei: depositB,
+    closingTimeSeconds
   })
 
   if (signer.toLowerCase() !== agentB) {
