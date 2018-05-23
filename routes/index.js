@@ -21,6 +21,7 @@ const getLedgerTransactionById = require('./getLedgerTransactionById')
 const getLedgerTransactionByChannelNonce = require('./getLedgerTransactionByChannelNonce')
 const cosignVirtualStateUpdate = require('./cosignVirtualStateUpdate')
 const deltaVcNotOpened = require('./deltaVcNotOpened')
+const cosignOpeningCert = require('./cosignOpeningCert')
 
 module.exports = app => {
   // test
@@ -125,6 +126,11 @@ module.exports = app => {
     .route('/virtualchannel/id/:id/cert/open')
     .post(saveOpeningCert.validator)
     .post(saveOpeningCert.handler)
+
+  app
+    .route('/virtualchannel/id/:id/cert/open/cosign')
+    .post(cosignOpeningCert.validator)
+    .post(cosignOpeningCert.handler)
 
   app // Update
     .route('/virtualchannel/id/:id/cert/open/:cid')
