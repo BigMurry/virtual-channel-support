@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
     }
   }
 
-  const certs = await Certificate.findAll(where)
+  const certs = await Certificate.findAll({ where })
 
   res.status(200).json({
     certs
