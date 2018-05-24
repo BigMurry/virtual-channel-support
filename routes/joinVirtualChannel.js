@@ -25,7 +25,7 @@ const handler = async (req, res, next) => {
       message: 'Virtual Channel not found'
     })
   }
-  if (vc.status !== 'Opening') {
+  if (vc.status.toLowerCase() !== 'opening') {
     return res.status(400).json({
       message: 'Channel cannot be joined at this time.'
     })
@@ -44,10 +44,10 @@ const handler = async (req, res, next) => {
     agentA,
     agentB,
     ingrid,
-    participantType: 'agentB',
-    depositInWei: depositB,
     subchanAtoI,
     subchanBtoI,
+    participantType: 'agentB',
+    depositInWei: depositB,
     closingTimeSeconds
   })
 
