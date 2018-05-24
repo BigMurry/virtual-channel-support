@@ -56,7 +56,7 @@ async function processChannelChallenge ({ channelId, closeTime }) {
   let channel = await Channel.findById(channelId.toLowerCase())
   if (channel) {
     channel.status = 'challenge'
-    channel.closeTime = closeTime.toNumber()
+    channel.closeTime = closeTime
     await channel.save() // not updating the closeTime
     // TODO attempt to tell user through phone
   }
