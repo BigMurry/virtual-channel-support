@@ -49,7 +49,7 @@ const handler = async (req, res, next) => {
     closingTimeSeconds
   } = vc
   let signer = Ethcalate.recoverSignerFromOpeningCerts(sig, {
-    id,
+    id: parseInt(id, 10),
     agentA,
     agentB,
     ingrid,

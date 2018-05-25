@@ -15,7 +15,8 @@ const handler = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() })
   }
-  const { id, depositB, cert } = matchedData(req)
+  let { id, depositB, cert } = matchedData(req)
+  id = parseInt(id, 10)
 
   const { VirtualChannel, Certificate } = getModels()
 
