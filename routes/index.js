@@ -22,6 +22,7 @@ const getLedgerTransactionByChannelNonce = require('./getLedgerTransactionByChan
 const cosignVirtualStateUpdate = require('./cosignVirtualStateUpdate')
 const deltaVcNotOpened = require('./deltaVcNotOpened')
 const cosignOpeningCert = require('./cosignOpeningCert')
+const getNextVirtualChannelId = require('./getNextVirtualChannelId')
 
 module.exports = app => {
   // test
@@ -32,6 +33,8 @@ module.exports = app => {
     .route('/virtualchannel')
     .post(createVirtualChannel.validator)
     .post(createVirtualChannel.handler)
+
+  app.route('/virtualchannel/next').get(getNextVirtualChannelId.handler)
 
   app
     .route('/virtualchannel/id/:id/join')
