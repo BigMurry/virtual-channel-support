@@ -16,12 +16,12 @@ const handler = async (req, res, next) => {
   }
 
   const { id, nonce } = matchedData(req)
-  const { Transaction, Channel } = getModels()
-  let updates = await Transaction.findAll({
-    include: [{ model: Channel }],
+  const { VirtualTransaction, VirtualChannel } = getModels()
+  let updates = await VirtualTransaction.findAll({
+    include: [{ model: VirtualChannel }],
     where: {
       [Op.and]: [
-        { channelId: id.toLowerCase() },
+        { virtualchannelId: id.toLowerCase() },
         { nonce: { [Op.gte]: nonce } }
       ]
     },

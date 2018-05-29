@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define(
-    'transactions',
+    'virtualtransactions',
     {
       id: {
         type: DataTypes.UUID,
@@ -8,25 +8,17 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         allowNull: false
       },
-      channelId: {
-        type: DataTypes.TEXT,
-        allowNull: false
-      },
       virtualchannelId: {
-        type: DataTypes.TEXT,
-        allowNull: true
-      },
-      hash: {
-        type: DataTypes.STRING,
-        allowNull: true
+        type: DataTypes.INTEGER,
+        allowNull: false
       },
       sigA: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       sigB: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       balanceA: {
         type: DataTypes.TEXT,
@@ -39,14 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       nonce: {
         type: DataTypes.INTEGER,
         allowNull: false
-      },
-      currentState: {
-        type: DataTypes.STRING,
-        allowNull: true
       }
     },
     {
-      tableName: 'transactions',
+      tableName: 'virtualtransactions',
       timestamps: true
     }
   )

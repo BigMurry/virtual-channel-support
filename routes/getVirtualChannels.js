@@ -10,7 +10,16 @@ const validator = [
   query('b', 'Please provide "b".').optional(),
   query('status')
     .optional()
-    .isIn(['open', 'joined', 'challenge', 'closed'])
+    .isIn([
+      'Opening',
+      'Opened',
+      'Empty',
+      'Closing',
+      'WaitingToClose',
+      'ClosingFinal',
+      'Timeouted',
+      'Closed'
+    ])
     .withMessage('Please use a valid status.')
 ]
 
@@ -22,7 +31,7 @@ const handler = async (req, res, next) => {
 
   const { address, status, a, b } = matchedData(req)
 
-  const { Channel, Transaction } = getModels()
+  const { VirtualChannel, VirtualTransaction } = getModels()
 
   let where = {
     [Op.and]: []
@@ -52,10 +61,10 @@ const handler = async (req, res, next) => {
   }
 
   // TODO MAKE THIS SCALE
-  const channels = await Channel.findAll({
+  const channels = await VirtualChannel.findAll({
     include: [
       {
-        model: Transaction,
+        model: VirtualTransaction,
         required: false,
         limit: 1,
         order: [['nonce', 'desc']]

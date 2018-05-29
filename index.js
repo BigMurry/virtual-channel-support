@@ -2,10 +2,10 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const setupHub = require('./hub')
-const { initWeb3, initChannelManager } = require('./web3')
+const setupRoutes = require('./routes')
+const { initWeb3, initChannelManager, getChannelManager } = require('./web3')
 const { connectDb } = require('./models')
-const initListener = require('./hub/channelListener')
+const startChannelListener = require('./helpers/channelListener')
 
 // express instance
 const app = express()
@@ -30,7 +30,7 @@ app.get('/hello', function (req, res) {
   res.send('Hello World')
 })
 
-setupHub(app)
+setupRoutes(app)
 
 app.set('trust proxy', true)
 app.set('trust proxy', 'loopback')
@@ -39,7 +39,9 @@ const port = process.env.PORT || 3000
 const server = app.listen(port, async () => {
   const host = server.address().address
   const port = server.address().port
-  console.log(`Ethcalate Hub listening at http://${host}:${port}`)
+  console.log(
+    `Virtual Channel Support Server listening at http://${host}:${port}`
+  )
   await connectDb()
   await initWeb3()
 
@@ -48,7 +50,8 @@ const server = app.listen(port, async () => {
 
   try {
     await initChannelManager(contractAddress)
-    await initListener(contractAddress)
+    const channelManager = getChannelManager()
+    startChannelListener(channelManager.options.address)
   } catch (e) {
     console.log('e: ', e)
     console.log('Could not initialize channel manager contract, aborting.')

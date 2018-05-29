@@ -15,13 +15,22 @@ const handler = async (req, res, next) => {
   }
   const { channel, nonce } = matchedData(req)
 
-  const { Transaction } = getModels()
-  const transaction = await Transaction.findOne({
-    where: {
-      channelId: channel.toLowerCase(),
-      nonce
-    }
-  })
+  const { VirtualTransaction } = getModels()
+  let transaction
+  if (nonce !== '0') {
+    transaction = await VirtualTransaction.findOne({
+      where: {
+        channelId: channel.toLowerCase(),
+        nonce
+      }
+    })
+  } else {
+    transaction = await VirtualTransaction.findAll({
+      where: {
+        channelId: channel.toLowerCase()
+      }
+    })
+  }
 
   if (!transaction) {
     res.status(404).json({ error: 'Could not find transaction.' })

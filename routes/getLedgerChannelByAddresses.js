@@ -17,15 +17,24 @@ const handler = async (req, res, next) => {
 
   const { agentA, agentB } = matchedData(req)
 
-  const { Channel } = getModels()
+  const { Channel, Transaction } = getModels()
   const channel = await Channel.findOne({
     where: {
       [Op.and]: [
         { agentA: agentA.toLowerCase() },
         { agentB: agentB.toLowerCase() }
       ]
-    }
+    },
+    include: [
+      {
+        model: Transaction,
+        required: false,
+        limit: 1,
+        order: [['nonce', 'desc']]
+      }
+    ]
   })
+
   if (!channel) {
     res.status(500).json({ error: 'Error fetching from db.' })
   } else {

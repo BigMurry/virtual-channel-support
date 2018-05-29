@@ -5,10 +5,8 @@ async function processChannelOpen ({
   channelId,
   agentA,
   agentB,
-  tokenContract,
   depositA,
-  challenge,
-  channelManagerAddress
+  challenge
 }) {
   const { User, Channel } = getModels()
 
@@ -30,15 +28,13 @@ async function processChannelOpen ({
 
     await Channel.build({
       id: channelId.toLowerCase(),
-      tokenContract: tokenContract.toLowerCase(),
       depositA: depositA.toString(),
       depositB: 0,
       agentA: agentA.toLowerCase(),
       agentB: agentB.toLowerCase(),
       challenge: challenge.toString(),
       status: 'open',
-      latestNonce: 0,
-      channelManagerAddress
+      latestNonce: 0
     }).save()
   }
 }
@@ -54,18 +50,13 @@ async function processChannelJoin ({ channelId, depositB }) {
   }
 }
 
-async function processChannelChallenge ({
-  channelId,
-  closeTime,
-  challengeStartedBy
-}) {
+async function processChannelChallenge ({ channelId, closeTime }) {
   const { Channel } = getModels()
   // check it channel exists
   let channel = await Channel.findById(channelId.toLowerCase())
   if (channel) {
     channel.status = 'challenge'
     channel.closeTime = closeTime
-    channel.challengeStartedBy = challengeStartedBy.toLowerCase()
     await channel.save() // not updating the closeTime
     // TODO attempt to tell user through phone
   }
@@ -76,6 +67,7 @@ async function processChannelUpdateState ({ channelId, nonce }) {
   // check it channel exists
   let channel = await Channel.findById(channelId.toLowerCase())
   if (channel) {
+    nonce = nonce.toNumber()
     channel.latestOnChainNonce = nonce
     if (nonce > channel.nonce) {
       // this will need to get flagged on the front end
@@ -97,7 +89,7 @@ async function processChannelClose ({ channelId }) {
   }
 }
 
-module.exports = async contractAddress => {
+module.exports = contractAddress => {
   const channelManager = getChannelManager()
 
   channelManager.events.allEvents(async (err, event) => {
@@ -105,30 +97,26 @@ module.exports = async contractAddress => {
       console.log(err)
       return
     }
-    const channelAttributes = {
-      ...event.returnValues,
-      channelManagerAddress: channelManager.options.address.toLowerCase()
-    }
     switch (event.event) {
       case 'ChannelOpen':
-        console.log('caught ChannelOpen', channelAttributes)
-        await processChannelOpen(channelAttributes)
+        console.log('caught ChannelOpen', event.returnValues)
+        await processChannelOpen(event.returnValues)
         break
       case 'ChannelJoin':
-        console.log('caught ChannelJoin', channelAttributes)
-        await processChannelJoin(channelAttributes)
+        console.log('caught ChannelJoin', event.returnValues)
+        await processChannelJoin(event.returnValues)
         break
       case 'ChannelChallenge':
-        console.log('caught ChannelChallenge', channelAttributes)
-        await processChannelChallenge(channelAttributes)
+        console.log('caught ChannelChallenge', event.returnValues)
+        await processChannelChallenge(event.returnValues)
         break
       case 'ChannelUpdateState':
-        console.log('caught ChannelUpdateState', channelAttributes)
-        await processChannelUpdateState(channelAttributes)
+        console.log('caught ChannelUpdateState', event.returnValues)
+        await processChannelUpdateState(event.returnValues)
         break
       case 'ChannelClose':
-        console.log('caught ChannelClose', channelAttributes)
-        await processChannelClose(channelAttributes)
+        console.log('caught ChannelClose', event.returnValues)
+        await processChannelClose(event.returnValues)
         break
     }
   })
@@ -138,30 +126,26 @@ module.exports = async contractAddress => {
     .getPastEvents('allEvents', { fromBlock: 0 })
     .then(async events => {
       events.map(async event => {
-        const channelAttributes = {
-          ...event.returnValues,
-          channelManagerAddress: channelManager.options.address.toLowerCase()
-        }
         switch (event.event) {
           case 'ChannelOpen':
-            console.log('Found ChannelOpen', channelAttributes)
-            await processChannelOpen(channelAttributes)
+            console.log('Found ChannelOpen', event.returnValues)
+            await processChannelOpen(event.returnValues)
             break
           case 'ChannelJoin':
-            console.log('Found ChannelJoin', channelAttributes)
-            await processChannelJoin(channelAttributes)
+            console.log('Found ChannelJoin', event.returnValues)
+            await processChannelJoin(event.returnValues)
             break
           case 'ChannelChallenge':
-            console.log('Found ChannelChallenge', channelAttributes)
-            await processChannelChallenge(channelAttributes)
+            console.log('Found ChannelChallenge', event.returnValues)
+            await processChannelChallenge(event.returnValues)
             break
           case 'ChannelUpdateState':
-            console.log('Found ChannelUpdateState', channelAttributes)
-            await processChannelUpdateState(channelAttributes)
+            console.log('Found ChannelUpdateState', event.returnValues)
+            await processChannelUpdateState(event.returnValues)
             break
           case 'ChannelClose':
-            console.log('Found ChannelClose', channelAttributes)
-            await processChannelClose(channelAttributes)
+            console.log('Found ChannelClose', event.returnValues)
+            await processChannelClose(event.returnValues)
             break
         }
       })
