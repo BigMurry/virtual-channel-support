@@ -33,7 +33,7 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel } = getModels()
 
-  const channel = VirtualChannel.findById(id.toLowerCase())
+  const channel = VirtualChannel.findById(id)
   if (!channel) {
     return res.status(500).json({ error: 'No channel with that id' })
   }
