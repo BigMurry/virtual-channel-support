@@ -23,7 +23,7 @@ module.exports = async ({
     ${requireSigB})`
   )
   const { VirtualChannel } = getModels()
-  const channel = await VirtualChannel.findById(virtualchannelId.toLowerCase())
+  const channel = await VirtualChannel.findById(virtualchannelId)
   if (!channel) {
     console.log('No virtual channel with that ID')
     return false
@@ -38,7 +38,7 @@ module.exports = async ({
   if (requireSigA) {
     if (sigA) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigA, {
-        id: virtualchannelId.toLowerCase(),
+        id: virtualchannelId,
         nonce: nonce.toString(),
         balanceA,
         balanceB
