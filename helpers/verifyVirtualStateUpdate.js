@@ -1,5 +1,4 @@
 const { getModels } = require('../models')
-const { getWeb3 } = require('../web3')
 const Ethcalate = require('../../ethcalate-testing/src/src')
 
 module.exports = async ({
@@ -38,8 +37,8 @@ module.exports = async ({
   if (requireSigA) {
     if (sigA) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigA, {
-        id: virtualchannelId,
-        nonce: nonce.toString(),
+        id: parseInt(virtualchannelId, 10),
+        nonce,
         balanceA,
         balanceB
       })
@@ -55,8 +54,8 @@ module.exports = async ({
   if (requireSigB) {
     if (sigB) {
       signer = Ethcalate.recoverDataFromProposedStateUpdate(sigB, {
-        id: virtualchannelId.toLowerCase(),
-        nonce: nonce.toString(),
+        id: parseInt(virtualchannelId, 10),
+        nonce,
         balanceA,
         balanceB
       })

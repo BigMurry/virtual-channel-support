@@ -35,11 +35,11 @@ const handler = async (req, res, next) => {
 
   const channel = VirtualChannel.findById(id)
   if (!channel) {
-    return res.status(500).json({ error: 'No channel with that id' })
+    return res.status(400).json({ error: 'No channel with that id' })
   }
 
   const stateObject = {
-    virtualchannelId: id,
+    virtualchannelId: parseInt(id, 10),
     nonce,
     balanceA,
     balanceB,
