@@ -8,7 +8,7 @@ const validator = [param('id', 'Please provide channel ID.').exists()]
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id } = matchedData(req)
 
@@ -25,9 +25,11 @@ const handler = async (req, res, next) => {
   })
 
   if (!channel) {
-    res.status(404).json({ error: 'Could not find channel.' })
+    res
+      .status(404)
+      .json({ status: 'error', message: 'Could not find channel.' })
   } else {
-    res.status(200).json({ channel })
+    res.status(200).json({ data: { ledgerChannel: channel } })
   }
 }
 

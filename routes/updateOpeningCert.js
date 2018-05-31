@@ -14,7 +14,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, sig, from, cid } = matchedData(req)
 
@@ -23,12 +23,14 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     return res.status(404).json({
+      status: 'error',
       message: 'Could not find Virtual Channel'
     })
   }
   const cert = await Certificate.findById(cid)
   if (!cert) {
     return res.status(404).json({
+      status: 'error',
       message: 'Could not find Certificate'
     })
   }
@@ -42,11 +44,15 @@ const handler = async (req, res, next) => {
     cert.sig = sig || cert.sig
     await cert.save()
     return res.status(200).json({
-      id,
-      cid
+      status: 'success',
+      data: {
+        virtualChannel: { id },
+        cert: { id: cid }
+      }
     })
   } else {
     return res.status(400).json({
+      status: 'error',
       message: 'Signer was not one of the virtual channel participants'
     })
   }

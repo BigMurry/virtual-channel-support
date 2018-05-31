@@ -7,20 +7,7 @@ const { Op } = require('sequelize')
 const validator = [
   query('address', 'Please provide address.').optional(),
   query('a', 'Please provide "a".').optional(),
-  query('b', 'Please provide "b".').optional(),
-  query('status')
-    .optional()
-    .isIn([
-      'Opening',
-      'Opened',
-      'Empty',
-      'Closing',
-      'WaitingToClose',
-      'ClosingFinal',
-      'Timeouted',
-      'Closed'
-    ])
-    .withMessage('Please use a valid status.')
+  query('b', 'Please provide "b".').optional()
 ]
 
 const handler = async (req, res, next) => {
@@ -31,7 +18,7 @@ const handler = async (req, res, next) => {
 
   const { address, status, a, b } = matchedData(req)
 
-  const { VirtualChannel, VirtualTransaction } = getModels()
+  const { Channel, Transaction } = getModels()
 
   let where = {
     [Op.and]: []
@@ -61,10 +48,10 @@ const handler = async (req, res, next) => {
   }
 
   // TODO MAKE THIS SCALE
-  const virtualChannel = await VirtualChannel.findAll({
+  const ledgerChannel = await Channel.findAll({
     include: [
       {
-        model: VirtualTransaction,
+        model: Transaction,
         required: false,
         limit: 1,
         order: [['nonce', 'desc']]
@@ -72,7 +59,7 @@ const handler = async (req, res, next) => {
     ],
     where
   })
-  res.status(200).json({ status: 'success', data: { virtualChannel } })
+  res.status(200).json({ status: 'error', data: { ledgerChannel } })
 }
 
 module.exports.validator = validator

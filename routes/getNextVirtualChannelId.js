@@ -9,12 +9,14 @@ const handler = async (req, res, next) => {
   })
   if (!vc) {
     return res.status(200).json({
-      nextId: 0
+      status: 'success',
+      data: { nextId: 0 }
     })
   }
 
   return res.status(200).json({
-    nextId: vc.id + 1
+    status: 'success',
+    data: { nextId: vc.id + 1 }
   })
 }
 

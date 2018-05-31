@@ -28,7 +28,7 @@ async function verifyCertUniqueness (signer) {
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, sig, from } = matchedData(req)
 
@@ -37,7 +37,8 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     return res.status(404).json({
-      message: 'Could not find Virtual Channel'
+      status: 'error',
+      message: 'Could not find Virtual Channel.'
     })
   }
   const {
@@ -76,12 +77,13 @@ const handler = async (req, res, next) => {
     }).save()
 
     return res.status(200).json({
-      id: certId
+      status: 'success',
+      data: { cert: { id: certId } }
     })
   } else {
-    console.log(signer)
     return res.status(400).json({
-      message: 'Signer was not one of the virtual channel participants'
+      status: 'error',
+      message: 'Signer was not one of the virtual channel participants.'
     })
   }
 }

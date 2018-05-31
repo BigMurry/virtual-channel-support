@@ -89,7 +89,7 @@ async function verifyAllCerts (vc) {
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, status } = matchedData(req)
 
@@ -98,6 +98,7 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     res.status(404).json({
+      status: 'error',
       message: 'Could not find Virtual Channel'
     })
   }
@@ -112,7 +113,8 @@ const handler = async (req, res, next) => {
   }
 
   res.status(200).json({
-    id
+    status: 'success',
+    data: { virtualChannel: { id } }
   })
 }
 

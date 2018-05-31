@@ -11,31 +11,33 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { channel, nonce } = matchedData(req)
 
   const { VirtualTransaction } = getModels()
-  let transaction
+  let virtualTransaction
   if (nonce !== '0') {
-    transaction = await VirtualTransaction.findOne({
+    virtualTransaction = await VirtualTransaction.findOne({
       where: {
         channelId: channel.toLowerCase(),
         nonce
       }
     })
   } else {
-    transaction = await VirtualTransaction.findAll({
+    virtualTransaction = await VirtualTransaction.findAll({
       where: {
         channelId: channel.toLowerCase()
       }
     })
   }
 
-  if (!transaction) {
-    res.status(404).json({ error: 'Could not find transaction.' })
+  if (!virtualTransaction) {
+    res
+      .status(404)
+      .json({ status: 'error', message: 'Could not find transaction.' })
   } else {
-    res.status(200).json({ transaction })
+    res.status(200).json({ status: 'success', data: { virtualTransaction } })
   }
 }
 

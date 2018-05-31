@@ -12,12 +12,12 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
 
   const { id, nonce } = matchedData(req)
   const { VirtualTransaction, VirtualChannel } = getModels()
-  let updates = await VirtualTransaction.findAll({
+  let virtualTransaction = await VirtualTransaction.findAll({
     include: [{ model: VirtualChannel }],
     where: {
       [Op.and]: [
@@ -27,10 +27,7 @@ const handler = async (req, res, next) => {
     },
     order: [['nonce', 'desc']]
   })
-  if (!updates) {
-    updates = []
-  }
-  res.status(200).json(updates)
+  res.status(200).json({ status: 'success', data: { virtualTransaction } })
 }
 
 module.exports.validator = validator

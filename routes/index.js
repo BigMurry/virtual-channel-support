@@ -1,7 +1,6 @@
 const test = require('./test')
-const getLedgerChannelByAddresses = require('./getLedgerChannelByAddresses')
+const getLedgerChannels = require('./getLedgerChannels')
 const getLedgerChannelById = require('./getLedgerChannelById')
-const getVirtualChannelByAddresses = require('./getVirtualChannelByAddresses')
 const getVirtualChannelById = require('./getVirtualChannelById')
 const getVirtualChannels = require('./getVirtualChannels')
 const createVirtualChannel = require('./createVirtualChannel')
@@ -37,17 +36,12 @@ module.exports = app => {
   app.route('/virtualchannel/next').get(getNextVirtualChannelId.handler)
 
   app
-    .route('/virtualchannel/id/:id/join')
+    .route('/virtualchannel/:id/join')
     .post(joinVirtualChannel.validator)
     .post(joinVirtualChannel.handler)
 
   app
-    .route('/virtualchannel/a/:agentA/b/:agentB')
-    .get(getVirtualChannelByAddresses.validator)
-    .get(getVirtualChannelByAddresses.handler)
-
-  app
-    .route('/virtualchannel/id/:id')
+    .route('/virtualchannel/:id')
     .get(getVirtualChannelById.validator)
     .get(getVirtualChannelById.handler)
 
@@ -57,22 +51,22 @@ module.exports = app => {
     .get(getVirtualChannels.handler)
 
   app
-    .route('/virtualchannel/id/:id/stateupdate')
+    .route('/virtualchannel/:id/stateupdate')
     .post(createVirtualStateUpdate.validator)
     .post(createVirtualStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/stateupdate')
+    .route('/virtualchannel/:id/stateupdate')
     .get(getVirtualStateUpdate.validator)
     .get(getVirtualStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/stateupdate/latest')
+    .route('/virtualchannel/:id/stateupdate/latest')
     .get(getLatestVirtualStateUpdate.validator)
     .get(getLatestVirtualStateUpdate.handler)
 
   app
-    .route('/virtualchannel/id/:id/stateupdate/verify')
+    .route('/virtualchannel/:id/stateupdate/verify')
     .post(verifyVirtualStateUpdate.validator)
     .post(verifyVirtualStateUpdate.handler)
 
@@ -94,17 +88,17 @@ module.exports = app => {
 
   // ledger channel
   app
-    .route('/ledgerchannel/a/:agentA/b/:agentB')
-    .get(getLedgerChannelByAddresses.validator)
-    .get(getLedgerChannelByAddresses.handler)
+    .route('/ledgerchannel')
+    .get(getLedgerChannels.validator)
+    .get(getLedgerChannels.handler)
 
   app
-    .route('/ledgerchannel/id/:id')
+    .route('/ledgerchannel/:id')
     .get(getLedgerChannelById.validator)
     .get(getLedgerChannelById.handler)
 
   app
-    .route('/ledgerchannel/id/:id/stateupdate')
+    .route('/ledgerchannel/:id/stateupdate')
     .post(createLedgerStateUpdate.validator)
     .post(createLedgerStateUpdate.handler)
 
@@ -121,33 +115,33 @@ module.exports = app => {
 
   // certs
   app
-    .route('/virtualchannel/id/:id/cert/open')
+    .route('/virtualchannel/:id/cert/open')
     .get(getOpeningCert.validator)
     .get(getOpeningCert.handler)
 
   app
-    .route('/virtualchannel/id/:id/cert/open')
+    .route('/virtualchannel/:id/cert/open')
     .post(saveOpeningCert.validator)
     .post(saveOpeningCert.handler)
 
   app
-    .route('/virtualchannel/id/:id/cert/open/cosign')
+    .route('/virtualchannel/:id/cert/open/cosign')
     .post(cosignOpeningCert.validator)
     .post(cosignOpeningCert.handler)
 
   app // Update
-    .route('/virtualchannel/id/:id/cert/open/:cid')
+    .route('/virtualchannel/:id/cert/:cid/open')
     .post(updateOpeningCert.validator)
     .post(updateOpeningCert.handler)
 
   app
-    .route('/virtualchannel/id/:id/status')
+    .route('/virtualchannel/:id/status')
     .post(updateVirtualChannelStatus.validator)
     .post(updateVirtualChannelStatus.handler)
 
   // checks
   app
-    .route('/virtualchannel/id/:id/check/notopened')
+    .route('/virtualchannel/:id/check/notopened')
     .post(deltaVcNotOpened.validator)
     .post(deltaVcNotOpened.handler)
 }

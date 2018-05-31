@@ -18,7 +18,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const {
     id,
@@ -35,16 +35,21 @@ const handler = async (req, res, next) => {
 
   const channel = await VirtualChannel.findById(id.toLowerCase())
   if (!channel) {
-    return res.status(404).json({ error: 'No channel with that id' })
+    return res
+      .status(404)
+      .json({ status: 'error', message: 'No channel with that id' })
   }
 
   if (channel.status !== 'Opened') {
-    return res.status(404).json({ error: 'Virtual channel status invalid' })
+    return res
+      .status(404)
+      .json({ status: 'error', message: 'Virtual channel status invalid' })
   }
 
   if (!requireSigA && !requireSigB) {
     return res.status(400).json({
-      error:
+      status: 'error',
+      message:
         'At least one signature required for a valid state update proposal'
     })
   }
@@ -65,11 +70,11 @@ const handler = async (req, res, next) => {
     await VirtualTransaction.build(stateObject).save()
     channel.latestNonce = nonce
     await channel.save()
-    return res
-      .status(200)
-      .json({ message: 'Proposed state update received and validated' })
+    return res.status(200).json({ status: 'success', data: null })
   } else {
-    return res.status(400).json({ error: 'Invalid state update provided' })
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Invalid state update provided' })
   }
 }
 

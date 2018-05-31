@@ -2,7 +2,6 @@ const { asyncRequest } = require('../util')
 const { body, param, validationResult } = require('express-validator/check')
 const { matchedData } = require('express-validator/filter')
 const { getModels } = require('../models')
-const Ethcalate = require('../../ethcalate-testing/src/src')
 
 const validator = [
   param('id').exists(),
@@ -13,7 +12,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', data: errors.mapped() })
   }
   const { id, ingridSigA, ingridSigB } = matchedData(req)
 
@@ -22,6 +21,7 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     return res.status(404).json({
+      status: 'error',
       message: 'Could not find Virtual Channel'
     })
   }
@@ -32,11 +32,13 @@ const handler = async (req, res, next) => {
   })
   if (!certs) {
     return res.status(404).json({
+      status: 'error',
       message: 'Could not find opening certificates'
     })
   }
   if (certs.length !== 2) {
     return res.status(404).json({
+      status: 'error',
       message: 'Incorrect number of certificates to cosign'
     })
   }
@@ -52,7 +54,8 @@ const handler = async (req, res, next) => {
   })
 
   return res.status(200).json({
-    certs
+    status: 'success',
+    data: null
   })
 }
 

@@ -14,7 +14,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', data: errors.mapped() })
   }
   const { id, sig, isAgentA } = matchedData(req)
 
@@ -24,7 +24,9 @@ const handler = async (req, res, next) => {
   })
 
   if (!transaction) {
-    res.status(404).json({ error: 'Could not find channel.' })
+    res
+      .status(404)
+      .json({ status: 'error', message: 'Could not find channel.' })
   }
   console.log('transaction:', transaction)
   // verify signature passed in is correct
@@ -47,11 +49,11 @@ const handler = async (req, res, next) => {
       transaction.sigB = sig
     }
     await transaction.save()
-    return res
-      .status(200)
-      .json({ message: 'Transaction successfully cosigned' })
+    return res.status(200).json({ status: 'success', data: null })
   } else {
-    return res.status(400).json({ error: 'Invalid signature scheme detected.' })
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Invalid signature scheme detected.' })
   }
 }
 

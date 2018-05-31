@@ -19,7 +19,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const {
     id,
@@ -37,12 +37,15 @@ const handler = async (req, res, next) => {
 
   const channel = await Channel.findById(id.toLowerCase())
   if (!channel) {
-    return res.status(404).json({ error: 'No channel with that id' })
+    return res
+      .status(404)
+      .json({ status: 'error', message: 'No channel with that id.' })
   }
 
   if (!requireSigA && !requireSigB) {
     return res.status(400).json({
-      error: 'At least one signature required for a valid state update'
+      status: 'error',
+      message: 'At least one signature required for a valid state update.'
     })
   }
 
@@ -59,12 +62,14 @@ const handler = async (req, res, next) => {
 
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
-    res.status(200).json({ message: 'State valid and updated' })
     await Transaction.build({ ...stateObject, virtualchannelId }).save()
     channel.latestNonce = nonce
     await channel.save()
+    res.status(200).json({ status: 'success', data: null })
   } else {
-    return res.status(400).json({ error: 'Invalid state update provided' })
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'Invalid state update provided.' })
   }
 }
 

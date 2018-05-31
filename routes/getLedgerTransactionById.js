@@ -8,19 +8,21 @@ const validator = [param('id', 'Please provide transaction ID.').exists()]
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id } = matchedData(req)
 
   const { Transaction, Channel } = getModels()
-  const transaction = await Transaction.findById(id, {
+  const ledgerTransaction = await Transaction.findById(id, {
     include: [{ model: Channel }]
   })
 
-  if (!transaction) {
-    res.status(404).json({ error: 'Could not find channel.' })
+  if (!ledgerTransaction) {
+    res
+      .status(404)
+      .json({ status: 'error', message: 'Could not find channel.' })
   } else {
-    res.status(200).json({ transaction })
+    res.status(200).json({ status: 'error', data: { ledgerTransaction } })
   }
 }
 

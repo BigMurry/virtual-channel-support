@@ -12,7 +12,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, sig } = matchedData(req)
   let where = {}
@@ -42,9 +42,11 @@ const handler = async (req, res, next) => {
   })
 
   if (!virtualChannel) {
-    res.status(404).json({ error: 'Could not find virtualChannel.' })
+    res
+      .status(404)
+      .json({ status: 'error', message: 'Could not find virtualChannel.' })
   } else {
-    res.status(200).json({ channel: virtualChannel })
+    res.status(200).json({ status: 'success', data: { virtualChannel } })
   }
 }
 

@@ -9,7 +9,7 @@ const validator = [param('id', 'Please provide virtual channel id.').exists()]
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id } = matchedData(req)
 
@@ -18,7 +18,9 @@ const handler = async (req, res, next) => {
   const virtualChannel = await VirtualChannel.findById(id)
 
   if (!virtualChannel) {
-    return res.status(404).json({ error: 'No channel with that id' })
+    return res
+      .status(404)
+      .json({ status: 'error', message: 'No channel with that id.' })
   }
 
   const { agentA, agentB, ingrid } = virtualChannel
@@ -86,8 +88,9 @@ const handler = async (req, res, next) => {
     }, delta * 1000)
 
     return res.status(200).json({
+      status: 'success',
       message: 'Did not find certs, starting delta timer.',
-      delta
+      data: { delta }
     })
   }
 }

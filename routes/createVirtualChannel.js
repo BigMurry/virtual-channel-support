@@ -37,9 +37,7 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel, Certificate, Channel } = getModels()
 
-  console.log('closingTimeSeconds: ', closingTimeSeconds)
-
-  let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
+  const signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
     id,
     agentA,
     agentB,
@@ -87,8 +85,8 @@ const handler = async (req, res, next) => {
   }).save()
 
   res.status(200).json({
-    id,
-    certId
+    status: 'success',
+    data: { virtualChannel: { id }, cert: { id: certId } }
   })
 }
 

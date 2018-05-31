@@ -18,7 +18,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const {
     id,
@@ -35,7 +35,9 @@ const handler = async (req, res, next) => {
 
   const channel = VirtualChannel.findById(id)
   if (!channel) {
-    return res.status(400).json({ error: 'No channel with that id' })
+    return res
+      .status(400)
+      .json({ status: 'error', error: 'No channel with that id' })
   }
 
   const stateObject = {
@@ -50,9 +52,11 @@ const handler = async (req, res, next) => {
   }
   const verified = await verifyStateUpdate(stateObject)
   if (verified) {
-    res.status(200).json({ message: 'Proposed state update is valid.' })
+    res.status(200).json({ status: 'success', data: null })
   } else {
-    return res.status(500).json({ error: 'Proposed state update is invalid.' })
+    return res
+      .status(400)
+      .json({ status: 'error', error: 'Proposed state update is invalid.' })
   }
 }
 

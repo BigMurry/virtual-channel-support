@@ -8,7 +8,7 @@ const validator = [param('id').exists(), query('agent').optional()]
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, agent } = matchedData(req)
 
@@ -17,6 +17,7 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     res.status(404).json({
+      status: 'error',
       message: 'Could not find Virtual Channel'
     })
   }
@@ -33,10 +34,13 @@ const handler = async (req, res, next) => {
     }
   }
 
-  const certs = await Certificate.findAll({ where })
+  const cert = await Certificate.findAll({ where })
 
   res.status(200).json({
-    certs
+    status: 'success',
+    data: {
+      cert
+    }
   })
 }
 

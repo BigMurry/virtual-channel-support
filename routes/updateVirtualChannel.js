@@ -8,7 +8,7 @@ const validator = [param('id').exists(), body('depositB').exists()]
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const { id, depositB } = matchedData(req)
 
@@ -17,7 +17,8 @@ const handler = async (req, res, next) => {
   const vc = await VirtualChannel.findById(id)
   if (!vc) {
     res.status(404).json({
-      message: 'Could not find Virtual Channel'
+      status: 'error',
+      message: 'Could not find Virtual Channel.'
     })
   }
 
@@ -25,7 +26,8 @@ const handler = async (req, res, next) => {
   await vc.save()
 
   res.status(200).json({
-    id
+    status: 'success',
+    data: { virtualChannel: { id } }
   })
 }
 

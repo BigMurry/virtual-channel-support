@@ -13,7 +13,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   let { id, depositB, cert } = matchedData(req)
   id = parseInt(id, 10)
@@ -23,11 +23,13 @@ const handler = async (req, res, next) => {
   let vc = await VirtualChannel.findById(id)
   if (!vc) {
     return res.status(404).json({
+      status: 'error',
       message: 'Virtual Channel not found'
     })
   }
   if (vc.status.toLowerCase() !== 'opening') {
     return res.status(400).json({
+      status: 'error',
       message: 'Channel cannot be joined at this time.'
     })
   }
@@ -54,7 +56,8 @@ const handler = async (req, res, next) => {
 
   if (signer.toLowerCase() !== agentB) {
     return res.status(400).json({
-      message: 'Opening cert not signed by agentB'
+      status: 'error',
+      message: 'Opening cert not signed by agentB.'
     })
   }
 
@@ -70,12 +73,8 @@ const handler = async (req, res, next) => {
   await vc.save()
 
   res.status(200).json({
-    message: `Channel joined`,
-    id,
-    agentB,
-    depositB,
-    balanceB: depositB,
-    certId
+    status: 'success',
+    data: { cert: { id: certId } }
   })
 }
 
