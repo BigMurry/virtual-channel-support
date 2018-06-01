@@ -72,7 +72,10 @@ async function verifyAllCerts (vc) {
         }
         break
     }
-    const signer = Ethcalate.recoverSignerFromOpeningCerts(cert.sig, sigParams)
+    const signer = Ethcalate.recoverSignerFromOpeningCerts({
+      sig: cert.sig,
+      ...sigParams
+    })
     if (signer === cert.from) {
       found[signer] = true
     } else {
