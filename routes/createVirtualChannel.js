@@ -20,7 +20,7 @@ const validator = [
 const handler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.mapped() })
+    return res.status(422).json({ status: 'error', errors: errors.mapped() })
   }
   const {
     id,
@@ -37,8 +37,17 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel, Certificate, Channel } = getModels()
 
-  const signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
-    id,
+  const vc = VirtualChannel.findOne({ where: { agentA, agentB } })
+  if (vc) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Channel is already open between agentA and agentB.'
+    })
+  }
+
+  const signer = Ethcalate.recoverSignerFromOpeningCerts({
+    sig: cert,
+    virtualChannelId: id,
     agentA,
     agentB,
     ingrid,
@@ -50,7 +59,8 @@ const handler = async (req, res, next) => {
   })
   if (signer.toLowerCase() !== agentA.toLowerCase()) {
     return res.status(400).json({
-      message: 'Cert was not signed by agentA'
+      status: 'error',
+      message: 'Cert was not signed by agentA.'
     })
   }
 
@@ -59,6 +69,7 @@ const handler = async (req, res, next) => {
   const lc2 = await Channel.findById(subchanBtoI)
   if (lc1.status !== 'joined' || lc2.status !== 'joined') {
     return res.status(400).json({
+      status: 'error',
       message:
         'One or more of the underlying ledger channels are not in open phase.'
     })
