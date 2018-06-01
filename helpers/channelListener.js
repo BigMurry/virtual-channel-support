@@ -109,12 +109,58 @@ async function processVcCloseFinal ({ vcId }) {
   }
 }
 
-async function processVcCloseFinalTimeout ({ vcId }) {
+async function processVcWaitingToClose ({ vcId }) {
   const { VirtualChannel } = getModels()
 
   const vc = await VirtualChannel.findById(vcId)
   if (vc) {
+    vc.status = 'WaitingToClose'
+    await vc.save()
+  }
+}
+
+// TO DO: make sure this is done right
+async function processVcClosed ({
+  vcId,
+  lcAIBalanceA,
+  lcAIBalanceB,
+  nonceAI,
+  lcBIBalanceA,
+  lcBIBalanceB,
+  nonceBI
+}) {
+  // vc closed, lc balances updated
+  const { VirtualChannel, Channel } = getModels()
+
+  const vc = await VirtualChannel.findById(vcId)
+  const subchanAtoI = await Channel.findById(vc.subchanAtoI)
+  const subchanBtoI = await Channel.findById(vc.subchanBtoI)
+  if (vc) {
     vc.status = 'Closed'
+    await vc.save()
+  }
+  if (subchanAtoI) {
+    // channel is A to I channel
+    subchanAtoI.balanceA = lcAIBalanceA
+    subchanAtoI.balanceB = lcAIBalanceB
+    subchanAtoI.latestOnChainNonce = lcAINonce
+    await subchanAtoI.save()
+  }
+  if (subchanBtoI) {
+    // channel is A to I channel
+    subchanBtoI.balanceA = lcBIBalanceA
+    subchanBtoI.balanceB = lcBIBalanceB
+    subchanBtoI.latestOnChainNonce = lcBINonce
+    await subchanBtoI.save()
+  }
+}
+
+async function processVcClosing ({ vcId }) {
+  const { VirtualChannel } = getModels()
+
+  const vc = await VirtualChannel.findById(vcId)
+  if (vc) {
+    vc.status = 'Timeouted'
     await vc.save()
   }
 }
@@ -149,9 +195,17 @@ async function processEvent (event) {
       console.log('caught VcCloseFinal', event.returnValues)
       await processVcCloseFinal(event.returnValues)
       break
-    case 'VcCloseFinalTimeout':
-      console.log('caught VcCloseFinalTimeout', event.returnValues)
-      await processVcCloseFinalTimeout(event.returnValues)
+    case 'VcWaitingToClose':
+      console.log('caught VcWaitingToClose', event.returnValues)
+      await processVcClose(event.returnValues)
+      break
+    case 'VcClosed':
+      console.log('caught VcClosed', event.returnValues)
+      await processVcClosed(event.returnValues)
+      break
+    case 'VcClosing':
+      console.log('caught VcClosing', event.returnValues)
+      await processVcClosing(event.returnValues)
       break
   }
 }
