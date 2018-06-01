@@ -40,11 +40,11 @@ const handler = async (req, res, next) => {
   }
 
   if (a) {
-    where[Op.and].push({ agentA: a })
+    where[Op.and].push({ agentA: a.toLowerCase() })
   }
 
   if (b) {
-    where[Op.and].push({ agentB: b })
+    where[Op.and].push({ agentB: b.toLowerCase() })
   }
 
   // TODO MAKE THIS SCALE
