@@ -37,7 +37,7 @@ const handler = async (req, res, next) => {
 
   const { VirtualChannel, Certificate, Channel } = getModels()
 
-  const vc = VirtualChannel.findOne({ where: { agentA, agentB } })
+  const vc = await VirtualChannel.findOne({ where: { agentA, agentB } })
   if (vc) {
     return res.status(400).json({
       status: 'error',
