@@ -34,7 +34,7 @@ async function verifyAllCerts (vc) {
     switch (cert.from) {
       case agentA:
         sigParams = {
-          id,
+          virtualChannelId: id,
           agentA,
           agentB,
           ingrid,
@@ -47,7 +47,7 @@ async function verifyAllCerts (vc) {
         break
       case agentB:
         sigParams = {
-          id,
+          virtualChannelId: id,
           agentA,
           agentB,
           ingrid,
@@ -60,7 +60,7 @@ async function verifyAllCerts (vc) {
         break
       case ingrid:
         sigParams = {
-          id,
+          virtualChannelId: id,
           agentA,
           agentB,
           ingrid,
