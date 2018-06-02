@@ -165,6 +165,16 @@ async function processVcClosing ({ vcId }) {
   }
 }
 
+async function processVcCloseInitTimedout ({ vcId }) {
+  const { VirtualChannel } = getModels()
+
+  const vc = await VirtualChannel.findById(vcId)
+  if (vc) {
+    vc.status = 'Closed'
+    await vc.save()
+  }
+}
+
 async function processEvent (event) {
   switch (event.event) {
     case 'ChannelOpen':
@@ -206,6 +216,10 @@ async function processEvent (event) {
     case 'VcClosing':
       console.log('caught VcClosing', event.returnValues)
       await processVcClosing(event.returnValues)
+      break
+    case 'VcCloseInitTimedout':
+      console.log('caught VcCloseInitTimedout', event.returnValues)
+      await processVcCloseInitTimedout(event.returnValues)
       break
   }
 }
