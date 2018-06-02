@@ -42,8 +42,9 @@ const handler = async (req, res, next) => {
     closingTimeSeconds
   } = vc
 
-  let signer = Ethcalate.recoverSignerFromOpeningCerts(cert, {
-    id,
+  let signer = Ethcalate.recoverSignerFromOpeningCerts({
+    sig: cert,
+    virtualChannelId: id,
     agentA,
     agentB,
     ingrid,
