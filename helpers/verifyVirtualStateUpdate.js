@@ -36,8 +36,9 @@ module.exports = async ({
   }
   if (requireSigA) {
     if (sigA) {
-      signer = Ethcalate.recoverDataFromProposedStateUpdate(sigA, {
-        id: parseInt(virtualchannelId, 10),
+      signer = Ethcalate.recoverDataFromProposedStateUpdate({
+        sig: sigA,
+        virtualChannelId: parseInt(virtualchannelId, 10),
         nonce,
         balanceA,
         balanceB
@@ -53,8 +54,9 @@ module.exports = async ({
   }
   if (requireSigB) {
     if (sigB) {
-      signer = Ethcalate.recoverDataFromProposedStateUpdate(sigB, {
-        id: parseInt(virtualchannelId, 10),
+      signer = Ethcalate.recoverDataFromProposedStateUpdate({
+        sig: sigB,
+        virtualChannelId: parseInt(virtualchannelId, 10),
         nonce,
         balanceA,
         balanceB
